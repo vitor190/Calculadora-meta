@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { CurrencyCode } from '../lib/currency';
 
 export interface TemplateCost {
   id: string;
@@ -16,7 +17,7 @@ export interface AdditionalProduct {
 export type DiscountType = 'none' | 'percent' | 'fixed';
 
 interface CalculatorState {
-  country: string;
+  currency: CurrencyCode;
   templates: TemplateCost[];
   planValue: number;
   hasEcommerce: boolean;
@@ -25,7 +26,7 @@ interface CalculatorState {
   deployment: number;
   discountType: DiscountType;
   discountValue: number;
-  setCountry: (country: string) => void;
+  setCurrency: (currency: CurrencyCode) => void;
   updateTemplate: (template: TemplateCost) => void;
   setPlanValue: (value: number) => void;
   setHasEcommerce: (value: boolean) => void;
@@ -39,7 +40,7 @@ interface CalculatorState {
 }
 
 export const useCalculator = create<CalculatorState>((set) => ({
-  country: 'Brasil',
+  currency: 'BRL',
   templates: [
     { id: 'marketing', category: 'Marketing', value: 0, quantity: 0 },
     { id: 'utility', category: 'Utilidade', value: 0, quantity: 0 },
@@ -52,7 +53,7 @@ export const useCalculator = create<CalculatorState>((set) => ({
   deployment: 0,
   discountType: 'none',
   discountValue: 0,
-  setCountry: (country) => set({ country }),
+  setCurrency: (currency) => set({ currency }),
   updateTemplate: (template) => set((state) => ({ templates: state.templates.map((item) => item.id === template.id ? template : item) })),
   setPlanValue: (planValue) => set({ planValue }),
   setHasEcommerce: (hasEcommerce) => set({ hasEcommerce }),
