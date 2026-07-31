@@ -1,4 +1,4 @@
-export const ui = {
+﻿export const ui = {
   pageTitle: 'font-display text-2xl font-medium text-gray-900 dark:text-white/90',
   eyebrow: 'font-mono text-[11px] uppercase tracking-widest text-[var(--moss)] dark:text-brand-400',
   mutedText: 'text-sm text-gray-500 dark:text-gray-400',
@@ -13,7 +13,8 @@ export const ui = {
   createButton:
     'inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#0d8fe8] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#087ac8] dark:bg-[#0d8fe8] dark:hover:bg-[#087ac8]',
   compactCreateButton:
-    'rounded-lg bg-[#0d8fe8] px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-[#087ac8] dark:bg-[#0d8fe8] dark:hover:bg-[#087ac8]',
+    'inline-flex h-10 w-40 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#0d8fe8] px-4 text-xs font-semibold leading-none text-white transition-colors hover:bg-[#087ac8] dark:bg-[#0d8fe8] dark:hover:bg-[#087ac8]',
   dangerIconButton:
     'rounded p-1.5 text-gray-500 transition-colors hover:bg-error-50 hover:text-error-600 dark:text-gray-400 dark:hover:bg-error-500/10 dark:hover:text-error-400',
 };
+
