@@ -1,4 +1,4 @@
-import { Calculator, CheckCircle2, History, Moon, PanelLeft, X } from 'lucide-react';
+﻿import { Calculator, CheckCircle2, History, Moon, PanelLeft, X } from 'lucide-react';
 
 interface VersionHistoryModalProps {
   isOpen: boolean;
@@ -54,3 +54,5 @@ export function VersionHistoryModal({ isOpen, onClose }: VersionHistoryModalProp
     </div>
   );
 }
+
+

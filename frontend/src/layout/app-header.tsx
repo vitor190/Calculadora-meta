@@ -1,4 +1,4 @@
-import { ChevronDown, History, Menu, Moon, Sun, X } from 'lucide-react';
+﻿import { ChevronDown, History, Menu, Moon, Sun, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { VersionHistoryModal } from '../components/version-history-modal';
 import { useSidebar } from '../store/sidebar.store';
@@ -40,3 +40,4 @@ export function AppHeader() {
     </header>
   );
 }
+

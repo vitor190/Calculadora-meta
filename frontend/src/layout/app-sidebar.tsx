@@ -1,4 +1,4 @@
-import { BookOpen, CircleDollarSign, FileText, PackageOpen, Percent, Rocket } from 'lucide-react';
+﻿import { BookOpen, CircleDollarSign, FileText, PackageOpen, Rocket } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { useSidebar } from '../store/sidebar.store';
 
@@ -6,7 +6,6 @@ const navItems = [
   { label: 'Custos da Meta', path: '/calculadora/meta', icon: CircleDollarSign },
   { label: 'Produtos Conexa', path: '/calculadora/produtos', icon: PackageOpen },
   { label: 'Implantação', path: '/calculadora/implantacao', icon: Rocket },
-  { label: 'Desconto', path: '/calculadora/desconto', icon: Percent },
   { label: 'Resumo financeiro', path: '/calculadora/resumo', icon: FileText },
   { label: 'Informações', path: '/calculadora/informacoes', icon: BookOpen },
 ];
@@ -42,3 +41,5 @@ export function AppSidebar() {
     </aside>
   );
 }
+
+

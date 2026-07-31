@@ -1,7 +1,6 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
+﻿import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { AppLayout } from '../layout/app-layout';
 import { DeploymentPage } from '../pages/deployment/DeploymentPage';
-import { DiscountPage } from '../pages/discount/DiscountPage';
 import { InformationPage } from '../pages/information/InformationPage';
 import { MetaCostsPage } from '../pages/meta/MetaCostsPage';
 import { ProductsPage } from '../pages/products/ProductsPage';
@@ -17,7 +16,6 @@ export function AppRoutes() {
           <Route path="/calculadora/meta" element={<MetaCostsPage />} />
           <Route path="/calculadora/produtos" element={<ProductsPage />} />
           <Route path="/calculadora/implantacao" element={<DeploymentPage />} />
-          <Route path="/calculadora/desconto" element={<DiscountPage />} />
           <Route path="/calculadora/resumo" element={<SummaryPage />} />
           <Route path="/calculadora/informacoes" element={<InformationPage />} />
         </Route>
@@ -26,3 +24,4 @@ export function AppRoutes() {
     </BrowserRouter>
   );
 }
+

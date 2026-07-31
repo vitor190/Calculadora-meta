@@ -1,11 +1,11 @@
-import { useState, type KeyboardEvent, type ReactNode } from 'react';
+﻿import { useState, type KeyboardEvent, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
 import { ui } from '../lib/ui';
 import { convertFromBrl, convertToBrl, getCurrencySymbol } from '../lib/currency';
 import { useCalculator } from '../store/calculator.store';
 
-export const calculatorSteps = ['/calculadora/meta', '/calculadora/produtos', '/calculadora/implantacao', '/calculadora/desconto', '/calculadora/resumo', '/calculadora/informacoes'];
+export const calculatorSteps = ['/calculadora/meta', '/calculadora/produtos', '/calculadora/implantacao', '/calculadora/resumo', '/calculadora/informacoes'];
 export const numberValue = (value: string) => Math.max(0, Number(value) || 0);
 export const preventInvalidNumberKeys = (event: KeyboardEvent<HTMLInputElement>, allowDecimal = true) => {
   const blockedKeys = allowDecimal ? ['e', 'E', '+', '-'] : ['e', 'E', '+', '-', '.', ','];
@@ -49,3 +49,5 @@ export function CalculatorShell({ children }: { children: ReactNode }) {
   const index = Math.max(0, calculatorSteps.indexOf(location.pathname));
   return <div className="mx-auto max-w-5xl"><div className="mb-6"><h2 className={ui.pageTitle}>Calculadora de custos WhatsApp</h2><p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Simule uma proposta comercial completa com atualização instantânea.</p></div>{children}<div className="mt-6 flex items-center justify-between"><button disabled={index === 0} onClick={() => navigate(calculatorSteps[index - 1])} className={`${ui.secondaryButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}><ArrowLeft size={16} />Voltar</button><span className="text-xs text-gray-400">Etapa {index + 1} de {calculatorSteps.length}</span><button disabled={index === calculatorSteps.length - 1} onClick={() => navigate(calculatorSteps[index + 1])} className={`${ui.createButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}>Próximo<ArrowRight size={16} /></button></div></div>;
 }
+
+

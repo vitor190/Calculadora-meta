@@ -1,80 +1,13 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import type { CurrencyCode } from '../lib/currency';
-
-export interface TemplateCost {
-  id: string;
-  category: string;
-  value: number;
-  quantity: number;
-}
-
-export interface AdditionalProduct {
-  id: number;
-  name: string;
-  value: number;
-}
-
+import { metaBrazilBasePrices } from '../lib/meta-pricing';
+export interface TemplateCost { id: string; category: string; value: number; quantity: number; }
+export interface AdditionalProduct { id: number; name: string; value: number; }
 export type DiscountType = 'none' | 'percent' | 'fixed';
-
-interface CalculatorState {
-  currency: CurrencyCode;
-  templates: TemplateCost[];
-  planValue: number;
-  hasEcommerce: boolean;
-  ecommerceValue: number;
-  products: AdditionalProduct[];
-  deployment: number;
-  discountType: DiscountType;
-  discountValue: number;
-  setCurrency: (currency: CurrencyCode) => void;
-  updateTemplate: (template: TemplateCost) => void;
-  setPlanValue: (value: number) => void;
-  setHasEcommerce: (value: boolean) => void;
-  setEcommerceValue: (value: number) => void;
-  addProduct: () => void;
-  updateProduct: (product: AdditionalProduct) => void;
-  removeProduct: (id: number) => void;
-  setDeployment: (value: number) => void;
-  setDiscountType: (type: DiscountType) => void;
-  setDiscountValue: (value: number) => void;
-}
-
+interface CalculatorState { currency: CurrencyCode; templates: TemplateCost[]; planValue: number; hasEcommerce: boolean; ecommerceValue: number; products: AdditionalProduct[]; deployment: number; planDiscountType: DiscountType; planDiscountValue: number; deploymentDiscountType: DiscountType; deploymentDiscountValue: number; setCurrency: (currency: CurrencyCode) => void; updateTemplate: (template: TemplateCost) => void; setPlanValue: (value: number) => void; setHasEcommerce: (value: boolean) => void; setEcommerceValue: (value: number) => void; addProduct: () => void; updateProduct: (product: AdditionalProduct) => void; removeProduct: (id: number) => void; setDeployment: (value: number) => void; setPlanDiscountType: (type: DiscountType) => void; setPlanDiscountValue: (value: number) => void; setDeploymentDiscountType: (type: DiscountType) => void; setDeploymentDiscountValue: (value: number) => void; }
 export const useCalculator = create<CalculatorState>((set) => ({
-  currency: 'BRL',
-  templates: [
-    { id: 'marketing', category: 'Marketing', value: 0, quantity: 0 },
-    { id: 'utility', category: 'Utilidade', value: 0, quantity: 0 },
-    { id: 'authentication', category: 'Autenticação', value: 0, quantity: 0 },
-  ],
-  planValue: 0,
-  hasEcommerce: false,
-  ecommerceValue: 0,
-  products: [],
-  deployment: 0,
-  discountType: 'none',
-  discountValue: 0,
-  setCurrency: (currency) => set({ currency }),
-  updateTemplate: (template) => set((state) => ({ templates: state.templates.map((item) => item.id === template.id ? template : item) })),
-  setPlanValue: (planValue) => set({ planValue }),
-  setHasEcommerce: (hasEcommerce) => set({ hasEcommerce }),
-  setEcommerceValue: (ecommerceValue) => set({ ecommerceValue }),
-  addProduct: () => set((state) => ({ products: [...state.products, { id: Date.now(), name: '', value: 0 }] })),
-  updateProduct: (product) => set((state) => ({ products: state.products.map((item) => item.id === product.id ? product : item) })),
-  removeProduct: (id) => set((state) => ({ products: state.products.filter((item) => item.id !== id) })),
-  setDeployment: (deployment) => set({ deployment }),
-  setDiscountType: (discountType) => set({ discountType, discountValue: 0 }),
-  setDiscountValue: (discountValue) => set({ discountValue }),
+ currency: 'BRL', templates: [{ id: 'marketing', category: 'Marketing', value: metaBrazilBasePrices.marketing, quantity: 0 }, { id: 'utility', category: 'Utilidade', value: metaBrazilBasePrices.utility, quantity: 0 }, { id: 'authentication', category: 'Autenticação', value: metaBrazilBasePrices.authentication, quantity: 0 }], planValue: 0, hasEcommerce: false, ecommerceValue: 0, products: [], deployment: 0, planDiscountType: 'none', planDiscountValue: 0, deploymentDiscountType: 'none', deploymentDiscountValue: 0,
+ setCurrency: (currency) => set({ currency }), updateTemplate: (template) => set((state) => ({ templates: state.templates.map((item) => item.id === template.id ? template : item) })), setPlanValue: (planValue) => set({ planValue }), setHasEcommerce: (hasEcommerce) => set({ hasEcommerce }), setEcommerceValue: (ecommerceValue) => set({ ecommerceValue }), addProduct: () => set((state) => ({ products: [...state.products, { id: Date.now(), name: '', value: 0 }] })), updateProduct: (product) => set((state) => ({ products: state.products.map((item) => item.id === product.id ? product : item) })), removeProduct: (id) => set((state) => ({ products: state.products.filter((item) => item.id !== id) })), setDeployment: (deployment) => set({ deployment }), setPlanDiscountType: (planDiscountType) => set({ planDiscountType, planDiscountValue: 0 }), setPlanDiscountValue: (planDiscountValue) => set({ planDiscountValue }), setDeploymentDiscountType: (deploymentDiscountType) => set({ deploymentDiscountType, deploymentDiscountValue: 0 }), setDeploymentDiscountValue: (deploymentDiscountValue) => set({ deploymentDiscountValue }),
 }));
-
-export function calculateTotals(state: CalculatorState) {
-  const meta = state.templates.reduce((sum, item) => sum + item.value * item.quantity, 0);
-  const templateQuantity = state.templates.reduce((sum, item) => sum + item.quantity, 0);
-  const ecommerce = state.hasEcommerce ? state.ecommerceValue : 0;
-  const additional = state.products.reduce((sum, item) => sum + item.value, 0);
-  const subtotal = meta + state.planValue + ecommerce + additional + state.deployment;
-  const rawDiscount = state.discountType === 'percent'
-    ? subtotal * Math.min(state.discountValue, 100) / 100
-    : state.discountType === 'fixed' ? state.discountValue : 0;
-  const discount = Math.min(rawDiscount, subtotal);
-  return { meta, templateQuantity, averageTemplate: templateQuantity ? meta / templateQuantity : 0, ecommerce, additional, subtotal, discount, final: subtotal - discount };
-}
+function getDiscount(base: number, type: DiscountType, value: number) { const requested = type === 'percent' ? base * Math.min(value, 100) / 100 : type === 'fixed' ? value : 0; return Math.min(Math.max(requested, 0), base); }
+export function calculateTotals(state: CalculatorState) { const meta = state.templates.reduce((sum, item) => sum + item.value * item.quantity, 0); const templateQuantity = state.templates.reduce((sum, item) => sum + item.quantity, 0); const ecommerce = state.hasEcommerce ? state.ecommerceValue : 0; const additional = state.products.reduce((sum, item) => sum + item.value, 0); const subtotal = meta + state.planValue + ecommerce + additional + state.deployment; const planDiscount = getDiscount(state.planValue, state.planDiscountType, state.planDiscountValue); const deploymentDiscount = getDiscount(state.deployment, state.deploymentDiscountType, state.deploymentDiscountValue); const discount = planDiscount + deploymentDiscount; return { meta, templateQuantity, averageTemplate: templateQuantity ? meta / templateQuantity : 0, ecommerce, additional, subtotal, planDiscount, deploymentDiscount, discount, discountedPlan: state.planValue - planDiscount, discountedDeployment: state.deployment - deploymentDiscount, final: subtotal - discount }; }
