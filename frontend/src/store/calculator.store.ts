@@ -5,7 +5,7 @@ import { commercialCatalog } from '../lib/commercial-catalog';
 
 export interface TemplateCost { id: string; category: string; value: number; quantity: number; }
 export interface ProposalItem { id: number; name: string; value: number; discountType: DiscountType; discountValue: number; }
-export interface ExtraService { id: number; name: string; value: number; discountType: DiscountType; discountValue: number; }
+export interface ExtraService { id: number; name: string; value: number; installments: number; discountType: DiscountType; discountValue: number; }
 export type DiscountType = 'none' | 'percent' | 'fixed';
 
 interface CalculatorState {
@@ -49,9 +49,9 @@ export const useCalculator = create<CalculatorState>((set) => ({
   selectPlan: (selectedPlanId) => set({ selectedPlanId, planValue: commercialCatalog.plans.find((item) => item.id === selectedPlanId)?.value ?? 0, planDiscountValue: 0 }),
   setPlanValue: (planValue) => set({ planValue }),
   updateResource: (resource) => set((state) => ({ resources: state.resources.map((item) => item.id === resource.id ? resource : item) })),
-  addResource: () => set((state) => ({ resources: [...state.resources, { id: Date.now(), name: '', value: 0, discountType: 'none', discountValue: 0 }] })),
+  addResource: () => set((state) => ({ resources: [...state.resources, { id: Date.now(), name: '', value: 0, installments: 1, discountType: 'none', discountValue: 0 }] })),
   removeResource: (id) => set((state) => ({ resources: state.resources.filter((item) => item.id !== id) })),
-  addService: () => set((state) => ({ services: [...state.services, { id: Date.now(), name: '', value: 0, discountType: 'none', discountValue: 0 }] })),
+  addService: () => set((state) => ({ services: [...state.services, { id: Date.now(), name: '', value: 0, installments: 1, discountType: 'none', discountValue: 0 }] })),
   updateService: (service) => set((state) => ({ services: state.services.map((item) => item.id === service.id ? service : item) })),
   removeService: (id) => set((state) => ({ services: state.services.filter((item) => item.id !== id) })),
   setPlanDiscountType: (planDiscountType) => set({ planDiscountType, planDiscountValue: 0 }),
@@ -76,5 +76,6 @@ export function calculateTotals(state: CalculatorState) {
   const subtotal = meta + state.planValue + resourceGross + services;
   return { meta, templateQuantity, resourceGross, resourceDiscount, averageTemplate: templateQuantity ? meta / templateQuantity : 0, resources, services, subtotal, planDiscount, serviceDiscount, discount, discountedPlan: state.planValue - planDiscount, discountedServices: services - serviceDiscount, final: subtotal - discount };
 }
+
 
 
