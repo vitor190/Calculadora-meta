@@ -1,5 +1,4 @@
-﻿import { ChevronDown } from 'lucide-react';
-import { CalculatorCard, CalculatorShell, CurrencyInput, NumberInput, PageHeading } from '../../components/calculator-ui';
+﻿import { AnimatedSelect, CalculatorCard, CalculatorShell, CurrencyInput, NumberInput, PageHeading } from '../../components/calculator-ui';
 import { currencies, formatCurrency, type CurrencyCode } from '../../lib/currency';
 import { ui } from '../../lib/ui';
 import { META_PRICING_REFERENCE, META_PRICING_SOURCE_URL, getMetaPriceInBrl, type MetaCategory } from '../../lib/meta-pricing';
@@ -25,12 +24,7 @@ export function MetaCostsPage() {
             </div>
             <div>
               <label className={ui.label} htmlFor="display-currency">Moeda de exibição</label>
-              <div className="relative">
-                <select id="display-currency" className={`${ui.input} appearance-none pr-10`} value={store.currency} onChange={(event) => store.setCurrency(event.target.value as CurrencyCode)}>
-                  {currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code} — {currency.name}</option>)}
-                </select>
-                <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              </div>
+<AnimatedSelect id="display-currency" value={store.currency} onChange={(event) => store.setCurrency(event.target.value as CurrencyCode)}>{currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code} — {currency.name}</option>)}</AnimatedSelect>
             </div>
           </div>
 
@@ -56,6 +50,8 @@ export function MetaCostsPage() {
     </CalculatorShell>
   );
 }
+
+
 
 
 

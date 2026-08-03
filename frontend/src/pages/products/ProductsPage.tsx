@@ -1,5 +1,5 @@
 ﻿import { PackageOpen, Plus, Rocket, SlidersHorizontal, Trash2 } from 'lucide-react';
-import { CalculatorCard, CalculatorShell, CurrencyInput, PageHeading } from '../../components/calculator-ui';
+import { AnimatedSelect, CalculatorCard, CalculatorShell, CurrencyInput, PageHeading } from '../../components/calculator-ui';
 import { DiscountFields } from '../../components/discount-fields';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { ui } from '../../lib/ui';
@@ -16,7 +16,7 @@ export function ProductsPage() {
   return <CalculatorShell><CalculatorCard><PageHeading title="Proposta Conexa" description="Escolha o plano e configure recursos, serviços e descontos em uma única tela." />
     <div className="sticky top-[72px] z-10 flex gap-2 overflow-x-auto border-b border-gray-100 bg-white/95 px-5 py-3 backdrop-blur dark:border-gray-800 dark:bg-gray-900/95 md:px-6">{sectionLinks.map(({ href, label, icon: Icon }) => <a key={href} href={href} className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-brand-500/10"><Icon size={16} />{label}</a>)}</div>
     <div className="space-y-8 p-5 md:p-6">
-      <section id="plano" className="scroll-mt-36"><div className="mb-4"><h3 className="font-semibold text-gray-900 dark:text-white/90">Plano mensal</h3><p className="mt-1 text-xs text-gray-400">Selecione um plano e informe manualmente o valor mensal.</p></div><div className="grid gap-4 md:grid-cols-2"><div><label className={ui.label}>Plano</label><select className={ui.input} value={store.selectedPlanId} onChange={(event) => store.selectPlan(event.target.value)}>{commercialCatalog.plans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name}</option>)}</select></div><div><label className={ui.label}>Valor mensal</label><CurrencyInput label="Valor mensal do plano" value={store.planValue} onChange={store.setPlanValue} /></div></div><div className="mt-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02]"><DiscountFields title="Desconto do plano mensal" type={store.planDiscountType} value={store.planDiscountValue} currency={store.currency} onTypeChange={store.setPlanDiscountType} onValueChange={store.setPlanDiscountValue} /></div></section>
+      <section id="plano" className="scroll-mt-36"><div className="mb-4"><h3 className="font-semibold text-gray-900 dark:text-white/90">Plano mensal</h3><p className="mt-1 text-xs text-gray-400">Selecione um plano e informe manualmente o valor mensal.</p></div><div className="grid gap-4 md:grid-cols-2"><div><label className={ui.label}>Plano</label><AnimatedSelect value={store.selectedPlanId} onChange={(event) => store.selectPlan(event.target.value)}>{commercialCatalog.plans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name}</option>)}</AnimatedSelect></div><div><label className={ui.label}>Valor mensal</label><CurrencyInput label="Valor mensal do plano" value={store.planValue} onChange={store.setPlanValue} /></div></div><div className="mt-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02]"><DiscountFields title="Desconto do plano mensal" type={store.planDiscountType} value={store.planDiscountValue} currency={store.currency} onTypeChange={store.setPlanDiscountType} onValueChange={store.setPlanDiscountValue} /></div></section>
 
       <section id="recursos" className="scroll-mt-36 border-t border-gray-100 pt-7 dark:border-gray-800">
         <div className="mb-4 flex items-center justify-between gap-4"><div><h3 className="font-semibold text-gray-900 dark:text-white/90">Recursos adicionais</h3><p className="mt-1 text-xs text-gray-400">Adicione recursos e defina valores e descontos individualmente.</p></div><button type="button" onClick={store.addResource} className={ui.compactCreateButton}><Plus size={16} className="shrink-0" />Adicionar recurso</button></div>
@@ -27,6 +27,7 @@ export function ProductsPage() {
     </div>
   </CalculatorCard></CalculatorShell>;
 }
+
 
 
 

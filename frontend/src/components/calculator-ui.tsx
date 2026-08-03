@@ -1,5 +1,5 @@
-﻿import { useState, type KeyboardEvent, type ReactNode } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+﻿import { useState, type KeyboardEvent, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
 import { ui } from '../lib/ui';
 import { convertFromBrl, convertToBrl, getCurrencySymbol } from '../lib/currency';
@@ -12,6 +12,10 @@ export const preventInvalidNumberKeys = (event: KeyboardEvent<HTMLInputElement>,
   if (blockedKeys.includes(event.key)) event.preventDefault();
 };
 
+export function AnimatedSelect({ children, className = '', onChange, onBlur, onKeyDown, onPointerDown, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
+  const [isOpen, setIsOpen] = useState(false);
+  return <div className="relative"><select {...props} className={`${ui.input} appearance-none pr-12 ${className}`} onPointerDown={(event) => { setIsOpen((open) => !open); onPointerDown?.(event); }} onChange={(event) => { setIsOpen(false); onChange?.(event); }} onBlur={(event) => { setIsOpen(false); onBlur?.(event); }} onKeyDown={(event) => { if (event.key === 'Escape' || event.key === 'Enter' || event.key === 'Tab') setIsOpen(false); else if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === ' ') setIsOpen(true); onKeyDown?.(event); }}>{children}</select><ChevronDown size={16} className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition-transform duration-200 ease-out ${isOpen ? 'rotate-180' : 'rotate-0'}`} /></div>;
+}
 export function CalculatorCard({ children }: { children: ReactNode }) {
   return <section className={`${ui.card} overflow-hidden`}>{children}</section>;
 }
@@ -49,6 +53,8 @@ export function CalculatorShell({ children }: { children: ReactNode }) {
   const index = Math.max(0, calculatorSteps.indexOf(location.pathname));
   return <div className="mx-auto max-w-5xl"><div className="mb-6"><h2 className={ui.pageTitle}>Calculadora de custos WhatsApp</h2><p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Simule uma proposta comercial completa com atualização instantânea.</p></div>{children}<div className="mt-6 flex items-center justify-between"><button disabled={index === 0} onClick={() => navigate(calculatorSteps[index - 1])} className={`${ui.secondaryButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}><ArrowLeft size={16} />Voltar</button><span className="text-xs text-gray-400">Etapa {index + 1} de {calculatorSteps.length}</span><button disabled={index === calculatorSteps.length - 1} onClick={() => navigate(calculatorSteps[index + 1])} className={`${ui.createButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}>Próximo<ArrowRight size={16} /></button></div></div>;
 }
+
+
 
 
 
