@@ -9,8 +9,8 @@ function applyTheme(theme: Theme) {
 }
 
 function loadInitialTheme(): Theme {
-  const saved = localStorage.getItem(THEME_KEY) as Theme | null;
-  const theme = saved ?? 'light';
+  const saved = localStorage.getItem(THEME_KEY);
+  const theme: Theme = saved === 'dark' ? 'dark' : 'light';
   applyTheme(theme);
   return theme;
 }

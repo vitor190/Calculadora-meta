@@ -6,6 +6,9 @@
 
 export type CurrencyCode = (typeof currencies)[number]['code'];
 
+export const isCurrencyCode = (value: string): value is CurrencyCode =>
+  currencies.some((currency) => currency.code === value);
+
 export const getCurrency = (code: CurrencyCode) =>
   currencies.find((currency) => currency.code === code) ?? currencies[0];
 
@@ -27,10 +30,13 @@ export const formatCurrency = (valueInBrl: number, currency: CurrencyCode) => {
 
 export const getCurrencySymbol = (currency: CurrencyCode) => {
   const config = getCurrency(currency);
-  return new Intl.NumberFormat(config.locale, {
-    style: 'currency',
-    currency: config.code,
-    currencyDisplay: 'narrowSymbol',
-  }).formatToParts(0).find((part) => part.type === 'currency')?.value ?? config.code;
+  return (
+    new Intl.NumberFormat(config.locale, {
+      style: 'currency',
+      currency: config.code,
+      currencyDisplay: 'narrowSymbol',
+    })
+      .formatToParts(0)
+      .find((part) => part.type === 'currency')?.value ?? config.code
+  );
 };
-
