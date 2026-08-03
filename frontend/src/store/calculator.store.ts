@@ -73,9 +73,14 @@ export function calculateTotals(state: CalculatorState) {
   const planDiscount = getDiscount(state.planValue, state.planDiscountType, state.planDiscountValue);
   const serviceDiscount = state.services.reduce((sum, item) => sum + getDiscount(item.value, item.discountType, item.discountValue), 0);
   const discount = planDiscount + resourceDiscount + serviceDiscount;
-  const subtotal = meta + state.planValue + resourceGross + services;
-  return { meta, templateQuantity, resourceGross, resourceDiscount, averageTemplate: templateQuantity ? meta / templateQuantity : 0, resources, services, subtotal, planDiscount, serviceDiscount, discount, discountedPlan: state.planValue - planDiscount, discountedServices: services - serviceDiscount, final: subtotal - discount };
+  const recurringSubtotal = meta + state.planValue + resourceGross;
+  const recurringDiscount = planDiscount + resourceDiscount;
+  const recurringTotal = recurringSubtotal - recurringDiscount;
+  const implementationTotal = services - serviceDiscount;
+  const subtotal = recurringSubtotal + services;
+  return { meta, templateQuantity, resourceGross, resourceDiscount, averageTemplate: templateQuantity ? meta / templateQuantity : 0, resources, services, subtotal, recurringSubtotal, recurringDiscount, recurringTotal, implementationTotal, planDiscount, serviceDiscount, discount, discountedPlan: state.planValue - planDiscount, discountedServices: implementationTotal, final: recurringTotal + implementationTotal };
 }
+
 
 
 
