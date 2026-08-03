@@ -38,8 +38,8 @@ export const useCalculator = create<CalculatorState>((set) => ({
     { id: 'utility', category: 'Utilidade', value: getMetaPriceInBrl('utility', 'BRL'), quantity: 0 },
     { id: 'authentication', category: 'Autenticação', value: getMetaPriceInBrl('authentication', 'BRL'), quantity: 0 },
   ],
-  selectedPlanId: commercialCatalog.plans[0].id,
-  planValue: commercialCatalog.plans[0].value,
+  selectedPlanId: '',
+  planValue: 0,
   resources: [],
   services: [],
   planDiscountType: 'none',
@@ -80,6 +80,7 @@ export function calculateTotals(state: CalculatorState) {
   const subtotal = recurringSubtotal + services;
   return { meta, templateQuantity, resourceGross, resourceDiscount, averageTemplate: templateQuantity ? meta / templateQuantity : 0, resources, services, subtotal, recurringSubtotal, recurringDiscount, recurringTotal, implementationTotal, planDiscount, serviceDiscount, discount, discountedPlan: state.planValue - planDiscount, discountedServices: implementationTotal, final: recurringTotal + implementationTotal };
 }
+
 
 
 

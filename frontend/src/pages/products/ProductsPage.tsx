@@ -33,7 +33,7 @@ export function ProductsPage() {
       <section id="plano" className="scroll-mt-36">
         <div className="mb-5"><h3 className="font-semibold text-gray-900 dark:text-white/90">Planos Conexa</h3><p className="mt-1 text-xs text-gray-400">O Conexa cresce com o seu negócio. Escolha um plano e personalize a proposta quando necessário.</p></div>
         <div className="grid gap-4 lg:grid-cols-3">{commercialCatalog.plans.map((plan) => <PlanCard key={plan.id} plan={plan} selected={store.selectedPlanId === plan.id} currency={store.currency} onSelect={() => store.selectPlan(plan.id)} />)}</div>
-        <div className="mt-5 grid gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02] md:grid-cols-2"><div><label className={ui.label}>Plano selecionado</label><AnimatedSelect value={store.selectedPlanId} onChange={(event) => store.selectPlan(event.target.value)}>{commercialCatalog.plans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name}</option>)}</AnimatedSelect></div><div><label className={ui.label}>Valor mensal da proposta</label><CurrencyInput label="Valor mensal do plano" value={store.planValue} onChange={store.setPlanValue} /></div><div className="md:col-span-2"><DiscountFields title="Desconto do plano mensal" type={store.planDiscountType} value={store.planDiscountValue} currency={store.currency} onTypeChange={store.setPlanDiscountType} onValueChange={store.setPlanDiscountValue} /></div></div>
+        <div className="mt-5 grid gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02] md:grid-cols-2"><div><label className={ui.label}>Plano selecionado</label><AnimatedSelect value={store.selectedPlanId} onChange={(event) => store.selectPlan(event.target.value)}><option value="" disabled>Selecione um plano</option>{commercialCatalog.plans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name}</option>)}</AnimatedSelect></div><div><label className={ui.label}>Valor mensal da proposta</label><CurrencyInput label="Valor mensal do plano" value={store.planValue} onChange={store.setPlanValue} /></div><div className="md:col-span-2"><DiscountFields title="Desconto do plano mensal" type={store.planDiscountType} value={store.planDiscountValue} currency={store.currency} onTypeChange={store.setPlanDiscountType} onValueChange={store.setPlanDiscountValue} /></div></div>
       </section>
 
       <section id="produtos" className="scroll-mt-36 border-t border-gray-100 pt-7 dark:border-gray-800">
@@ -45,6 +45,7 @@ export function ProductsPage() {
     </div>
   </CalculatorCard></CalculatorShell>;
 }
+
 
 
 
