@@ -2,7 +2,7 @@
 import { CalculatorCard, CalculatorShell, CurrencyInput, NumberInput, PageHeading } from '../../components/calculator-ui';
 import { currencies, formatCurrency, type CurrencyCode } from '../../lib/currency';
 import { ui } from '../../lib/ui';
-import { META_PRICING_REFERENCE, META_PRICING_SOURCE_URL, metaBrazilBasePrices } from '../../lib/meta-pricing';
+import { META_PRICING_REFERENCE, META_PRICING_SOURCE_URL, getMetaPriceInBrl, type MetaCategory } from '../../lib/meta-pricing';
 import { calculateTotals, useCalculator } from '../../store/calculator.store';
 
 export function MetaCostsPage() {
@@ -12,7 +12,7 @@ export function MetaCostsPage() {
   return (
     <CalculatorShell>
       <CalculatorCard>
-        <PageHeading title="Custos da Meta" description="Valores-base da Meta para o Brasil, com conversão para a moeda de exibição." />
+        <PageHeading title="Custos da Meta" description="Tarifas oficiais da Meta para o Brasil na moeda de cobrança selecionada." />
         <div className="p-5 md:p-6">
           <div className="grid items-end gap-5 sm:grid-cols-2">
             <div>
@@ -35,7 +35,7 @@ export function MetaCostsPage() {
           </div>
 
           <div className="mt-11">
-            <div className="mb-4 flex flex-col gap-2 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-xs text-gray-600 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between"><span>Valores iniciais: {META_PRICING_REFERENCE}. Permanecem editáveis para ajustes e faixas de volume.</span><div className="flex shrink-0 gap-3"><a href={META_PRICING_SOURCE_URL} target="_blank" rel="noreferrer" className="font-semibold text-brand-600 hover:underline dark:text-brand-400">Consultar Meta</a><button type="button" className="font-semibold text-brand-600 hover:underline dark:text-brand-400" onClick={() => store.templates.forEach((item) => store.updateTemplate({ ...item, value: metaBrazilBasePrices[item.id as keyof typeof metaBrazilBasePrices] }))}>Restaurar tabela</button></div></div>
+            <div className="mb-4 flex flex-col gap-2 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-xs text-gray-600 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between"><span>Valores iniciais: {META_PRICING_REFERENCE}.</span><div className="flex shrink-0 gap-3"><a href={META_PRICING_SOURCE_URL} target="_blank" rel="noreferrer" className="font-semibold text-brand-600 hover:underline dark:text-brand-400">Consultar Meta</a><button type="button" className="font-semibold text-brand-600 hover:underline dark:text-brand-400" onClick={() => store.templates.forEach((item) => store.updateTemplate({ ...item, value: getMetaPriceInBrl(item.id as MetaCategory, store.currency) }))}>Restaurar tabela</button></div></div>
             <div className="hidden grid-cols-[1.2fr_1fr_.7fr_1fr] gap-3 border-b border-gray-100 pb-3 text-xs font-medium uppercase text-gray-400 dark:border-gray-800 md:grid">
               <span>Categoria</span><span>Valor por template</span><span>Quantidade</span><span className="text-right">Subtotal</span>
             </div>
@@ -56,6 +56,7 @@ export function MetaCostsPage() {
     </CalculatorShell>
   );
 }
+
 
 
 

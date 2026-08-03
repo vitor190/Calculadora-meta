@@ -1,6 +1,6 @@
 ﻿export const commercialCatalog = {
   plans: [
-    { id: 'conexa', name: 'Plano Conexa', value: 1000 },
+    { id: 'conexa', name: 'Plano Conexa', value: 0 },
     { id: 'custom', name: 'Plano personalizado', value: 0 },
   ],
   resources: [
@@ -9,3 +9,4 @@
     { id: 'ecommerce', name: 'E-commerce', value: 0 },
   ],
 } as const;
+

@@ -1,4 +1,4 @@
-export const currencies = [
+﻿export const currencies = [
   { code: 'BRL', name: 'Real Brasileiro', locale: 'pt-BR', rateFromBrl: 1 },
   { code: 'USD', name: 'Dólar Americano', locale: 'en-US', rateFromBrl: 0.183 },
   { code: 'EUR', name: 'Euro', locale: 'de-DE', rateFromBrl: 0.158 },
@@ -33,3 +33,4 @@ export const getCurrencySymbol = (currency: CurrencyCode) => {
     currencyDisplay: 'narrowSymbol',
   }).formatToParts(0).find((part) => part.type === 'currency')?.value ?? config.code;
 };
+
