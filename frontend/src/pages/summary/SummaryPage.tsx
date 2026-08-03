@@ -1,12 +1,8 @@
-﻿import { BadgePercent, CircleDollarSign, MessageSquareText, ReceiptText } from 'lucide-react';
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 import { CalculatorShell } from '../../components/calculator-ui';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
 import { calculateTotals, useCalculator, type DiscountType } from '../../store/calculator.store';
-import { CostComparisonChart } from './CostComparisonChart';
-import { CostDistributionChart } from './CostDistributionChart';
-import { MetricCard } from './MetricCard';
 
 function discountAmount(value: number, type: DiscountType, discount: number) {
   const amount = type === 'percent' ? value * Math.min(discount, 100) / 100 : type === 'fixed' ? discount : 0;
@@ -31,35 +27,28 @@ export function SummaryPage() {
   const selectedPlan = commercialCatalog.plans.find((plan) => plan.id === store.selectedPlanId);
   const addedResources = store.resources;
   const usedTemplates = store.templates.filter((template) => template.quantity > 0);
-  const costs = [
-    { label: 'Meta', value: totals.meta, color: '#049df6' },
-    { label: 'Plano Conexa', value: totals.discountedPlan, color: '#32a699' },
-    { label: 'Produtos adicionais', value: totals.resources, color: '#7a5af8' },
-    { label: 'Implantação', value: totals.discountedServices, color: '#f04438' },
-  ];
-
   return <CalculatorShell>
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <MetricCard label="Total final" value={formatCurrency(totals.final, store.currency)} helper={`Valor em ${store.currency}`} icon={CircleDollarSign} />
-      <MetricCard label="Subtotal" value={formatCurrency(totals.subtotal, store.currency)} helper="Antes dos descontos" icon={ReceiptText} tone="success" />
-      <MetricCard label="Descontos" value={formatCurrency(totals.discount, store.currency)} helper="Plano, produtos e implantação" icon={BadgePercent} tone="warning" />
-      <MetricCard label="Templates" value={String(totals.templateQuantity)} helper={`Média de ${formatCurrency(totals.averageTemplate, store.currency)}`} icon={MessageSquareText} />
-    </div>
-
-    <div className="mt-5 grid gap-5 xl:grid-cols-2"><CostDistributionChart items={costs} currency={store.currency} /><CostComparisonChart items={costs} currency={store.currency} /></div>
-
-    <section className="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
+    <section className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
       <div className="flex flex-col gap-4 border-b border-gray-100 px-5 py-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="font-semibold text-gray-900 dark:text-white/90">Detalhamento financeiro</h3><p className="mt-1 text-xs text-gray-400">Itens adicionados em cada categoria da proposta</p></div><span className="rounded-full bg-success-50 px-3 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-400">Atualizado em tempo real</span></div>
       <div className="divide-y divide-gray-100 px-5 dark:divide-gray-800">
         <DetailGroup label="Custos da Meta" total={formatCurrency(totals.meta, store.currency)} color="#049df6">{usedTemplates.length ? usedTemplates.map((item) => <DetailRow key={item.id} label={item.category} helper={`${item.quantity} template${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, store.currency)}`} value={formatCurrency(item.value * item.quantity, store.currency)} />) : <EmptyDetail>Nenhum template informado.</EmptyDetail>}</DetailGroup>
-        <DetailGroup label="Plano Conexa" total={formatCurrency(totals.discountedPlan, store.currency)} color="#32a699">{store.planValue > 0 ? <DetailRow label={selectedPlan?.name ?? 'Plano selecionado'} helper="Valor mensal" value={formatCurrency(store.planValue, store.currency)} discount={totals.planDiscount > 0 ? `− ${formatCurrency(totals.planDiscount, store.currency)} de desconto` : undefined} /> : <EmptyDetail>Nenhum valor adicionado.</EmptyDetail>}</DetailGroup>
-        <DetailGroup label="Produtos adicionais" total={formatCurrency(totals.resources, store.currency)} color="#7a5af8">{addedResources.length ? addedResources.map((item) => { const discount = discountAmount(item.value, item.discountType, item.discountValue); return <DetailRow key={item.id} label={item.name || 'Produto sem nome'} value={formatCurrency(item.value - discount, store.currency)} helper={discount > 0 ? `Valor original: ${formatCurrency(item.value, store.currency)}` : undefined} discount={discount > 0 ? `− ${formatCurrency(discount, store.currency)} de desconto` : undefined} />; }) : <EmptyDetail>Nenhum produto adicionado.</EmptyDetail>}</DetailGroup>
-        <DetailGroup label="Implantação" total={formatCurrency(totals.discountedServices, store.currency)} color="#f04438">{store.services.length ? store.services.map((item) => { const discount = discountAmount(item.value, item.discountType, item.discountValue); const netValue = item.value - discount; const installmentText = item.installments > 1 ? `${item.installments}x de ${formatCurrency(netValue / item.installments, store.currency)}` : undefined; const originalText = discount > 0 ? `Valor original: ${formatCurrency(item.value, store.currency)}` : undefined; return <DetailRow key={item.id} label={item.name || 'Implantação sem nome'} value={formatCurrency(netValue, store.currency)} helper={[originalText, installmentText].filter(Boolean).join(' · ') || undefined} discount={discount > 0 ? `− ${formatCurrency(discount, store.currency)} de desconto` : undefined} />; }) : <EmptyDetail>Nenhuma implantação adicionada.</EmptyDetail>}</DetailGroup>
+        <DetailGroup label="Plano Conexa" total={formatCurrency(totals.discountedPlan, store.currency)} color="#32a699">{selectedPlan ? <><DetailRow label={selectedPlan.name} helper="Valor mensal da proposta" value={store.planValue > 0 ? formatCurrency(store.planValue, store.currency) : 'Nenhum valor adicionado'} discount={totals.planDiscount > 0 ? `− ${formatCurrency(totals.planDiscount, store.currency)} de desconto` : undefined} /><div className="mt-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800"><div className="grid grid-cols-[1fr_auto] gap-4 bg-gray-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:bg-white/[0.03]"><span>Recurso</span><span>Situação</span></div><div className="divide-y divide-gray-100 dark:divide-gray-800">{selectedPlan.features.map((feature) => <div key={feature} className="grid grid-cols-[1fr_auto] items-center gap-4 bg-white px-3 py-2.5 text-xs dark:bg-gray-900"><span className="text-gray-600 dark:text-gray-300">{feature}</span><span className="rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-semibold text-success-700 dark:bg-success-500/10 dark:text-success-400">Incluído</span></div>)}</div></div></> : <EmptyDetail>Nenhum plano selecionado.</EmptyDetail>}</DetailGroup>
+        <DetailGroup label="Produtos adicionais" total={formatCurrency(totals.resources, store.currency)} color="#7a5af8">{addedResources.length ? addedResources.map((item) => { const grossValue = item.value * item.quantity; const discount = discountAmount(grossValue, item.discountType, item.discountValue); const quantityText = `${item.quantity} unidade${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, store.currency)}`; const originalText = discount > 0 ? `Valor original: ${formatCurrency(grossValue, store.currency)}` : undefined; return <DetailRow key={item.id} label={item.name || 'Produto sem nome'} value={formatCurrency(grossValue - discount, store.currency)} helper={[quantityText, originalText].filter(Boolean).join(' · ')} discount={discount > 0 ? `− ${formatCurrency(discount, store.currency)} de desconto` : undefined} />; }) : <EmptyDetail>Nenhum produto adicionado.</EmptyDetail>}</DetailGroup>
+        <DetailGroup label="Implantação" total={formatCurrency(totals.discountedServices, store.currency)} color="#f04438">{store.services.length ? store.services.map((item) => { const discount = discountAmount(item.value, item.discountType, item.discountValue); const netValue = item.value - discount; const discountedText = discount > 0 ? `Valor com desconto: ${formatCurrency(netValue, store.currency)}` : undefined; const installmentText = item.installments > 1 ? `${item.installments}x de ${formatCurrency(netValue / item.installments, store.currency)}` : undefined; return <DetailRow key={item.id} label={item.name || 'Implantação sem nome'} value={formatCurrency(item.value, store.currency)} helper={[discountedText, installmentText].filter(Boolean).join(' · ') || undefined} discount={discount > 0 ? `− ${formatCurrency(discount, store.currency)} de desconto` : undefined} />; }) : <EmptyDetail>Nenhuma implantação adicionada.</EmptyDetail>}</DetailGroup>
       </div>
       <div className="flex items-center justify-between bg-brand-500 px-5 py-5 text-white"><div><p className="text-xs font-medium uppercase tracking-wider text-white/70">Total final da proposta</p><p className="mt-1 text-sm text-white/80">Pronto para apresentação em {store.currency}</p></div><strong className="text-2xl font-semibold sm:text-3xl">{formatCurrency(totals.final, store.currency)}</strong></div>
     </section>
   </CalculatorShell>;
 }
+
+
+
+
+
+
+
+
+
 
 
 

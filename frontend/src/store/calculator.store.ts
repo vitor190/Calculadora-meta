@@ -4,7 +4,7 @@ import { getMetaPriceInBrl, type MetaCategory } from '../lib/meta-pricing';
 import { commercialCatalog } from '../lib/commercial-catalog';
 
 export interface TemplateCost { id: string; category: string; value: number; quantity: number; }
-export interface ProposalItem { id: number; name: string; value: number; discountType: DiscountType; discountValue: number; }
+export interface ProposalItem { id: number; name: string; value: number; quantity: number; discountType: DiscountType; discountValue: number; }
 export interface ExtraService { id: number; name: string; value: number; installments: number; discountType: DiscountType; discountValue: number; }
 export type DiscountType = 'none' | 'percent' | 'fixed';
 
@@ -49,7 +49,7 @@ export const useCalculator = create<CalculatorState>((set) => ({
   selectPlan: (selectedPlanId) => set({ selectedPlanId, planValue: commercialCatalog.plans.find((item) => item.id === selectedPlanId)?.value ?? 0, planDiscountValue: 0 }),
   setPlanValue: (planValue) => set({ planValue }),
   updateResource: (resource) => set((state) => ({ resources: state.resources.map((item) => item.id === resource.id ? resource : item) })),
-  addResource: () => set((state) => ({ resources: [...state.resources, { id: Date.now(), name: '', value: 0, installments: 1, discountType: 'none', discountValue: 0 }] })),
+  addResource: () => set((state) => ({ resources: [...state.resources, { id: Date.now(), name: '', value: 0, quantity: 0, discountType: 'none', discountValue: 0 }] })),
   removeResource: (id) => set((state) => ({ resources: state.resources.filter((item) => item.id !== id) })),
   addService: () => set((state) => ({ services: [...state.services, { id: Date.now(), name: '', value: 0, installments: 1, discountType: 'none', discountValue: 0 }] })),
   updateService: (service) => set((state) => ({ services: state.services.map((item) => item.id === service.id ? service : item) })),
@@ -66,8 +66,8 @@ function getDiscount(base: number, type: DiscountType, value: number) {
 export function calculateTotals(state: CalculatorState) {
   const meta = state.templates.reduce((sum, item) => sum + item.value * item.quantity, 0);
   const templateQuantity = state.templates.reduce((sum, item) => sum + item.quantity, 0);
-  const resourceGross = state.resources.reduce((sum, item) => sum + item.value, 0);
-  const resourceDiscount = state.resources.reduce((sum, item) => sum + getDiscount(item.value, item.discountType, item.discountValue), 0);
+  const resourceGross = state.resources.reduce((sum, item) => sum + item.value * item.quantity, 0);
+  const resourceDiscount = state.resources.reduce((sum, item) => sum + getDiscount(item.value * item.quantity, item.discountType, item.discountValue), 0);
   const resources = resourceGross - resourceDiscount;
   const services = state.services.reduce((sum, item) => sum + item.value, 0);
   const planDiscount = getDiscount(state.planValue, state.planDiscountType, state.planDiscountValue);
@@ -76,6 +76,8 @@ export function calculateTotals(state: CalculatorState) {
   const subtotal = meta + state.planValue + resourceGross + services;
   return { meta, templateQuantity, resourceGross, resourceDiscount, averageTemplate: templateQuantity ? meta / templateQuantity : 0, resources, services, subtotal, planDiscount, serviceDiscount, discount, discountedPlan: state.planValue - planDiscount, discountedServices: services - serviceDiscount, final: subtotal - discount };
 }
+
+
 
 
 
