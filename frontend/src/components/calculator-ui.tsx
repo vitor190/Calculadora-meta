@@ -20,11 +20,11 @@ export function PageHeading({ title, description }: { title: string; description
   return <div className="border-b border-gray-100 px-5 py-5 dark:border-gray-800 md:px-6"><p className={ui.eyebrow}>Calculadora comercial</p><h1 className="mt-2 text-xl font-semibold text-gray-900 dark:text-white/90">{title}</h1><p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{description}</p></div>;
 }
 
-export function CurrencyInput({ value, onChange, label, emptyWhenZero = false }: { value: number; onChange: (value: number) => void; label: string; emptyWhenZero?: boolean }) {
+export function CurrencyInput({ value, onChange, label }: { value: number; onChange: (value: number) => void; label: string }) {
   const currency = useCalculator((state) => state.currency);
   const displayValue = Number(convertFromBrl(value, currency).toFixed(6));
   const [draft, setDraft] = useState<string | null>(null);
-  return <div className="relative"><span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-gray-400">{getCurrencySymbol(currency)}</span><input aria-label={label} className={`${ui.input} pl-11 focus:opacity-100 ${draft === null && displayValue === 0 ? 'opacity-50' : 'opacity-100'}`} type="number" min="0" step="0.01" value={draft ?? (emptyWhenZero && displayValue === 0 ? '' : displayValue)} placeholder={emptyWhenZero ? '' : '0,00'} onFocus={(event) => { if (displayValue === 0) setDraft(''); else { setDraft(String(displayValue)); event.currentTarget.select(); } }} onBlur={() => { if (draft === '') onChange(0); setDraft(null); }} onKeyDown={(event) => preventInvalidNumberKeys(event)} onChange={(event) => { const next = event.target.value; setDraft(next); if (next !== '') onChange(convertToBrl(numberValue(next), currency)); }} /></div>;
+  return <div className="relative"><span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-gray-400">{getCurrencySymbol(currency)}</span><input aria-label={label} className={`${ui.input} pl-11 focus:opacity-100 ${draft === null && displayValue === 0 ? 'opacity-50' : 'opacity-100'}`} type="number" min="0" step="0.01" value={draft ?? displayValue} placeholder="0,00" onFocus={(event) => { if (displayValue === 0) setDraft(''); else { setDraft(String(displayValue)); event.currentTarget.select(); } }} onBlur={() => { if (draft === '') onChange(0); setDraft(null); }} onKeyDown={(event) => preventInvalidNumberKeys(event)} onChange={(event) => { const next = event.target.value; setDraft(next); if (next !== '') onChange(convertToBrl(numberValue(next), currency)); }} /></div>;
 }
 
 interface NumberInputProps {
@@ -49,6 +49,7 @@ export function CalculatorShell({ children }: { children: ReactNode }) {
   const index = Math.max(0, calculatorSteps.indexOf(location.pathname));
   return <div className="mx-auto max-w-5xl"><div className="mb-6"><h2 className={ui.pageTitle}>Calculadora de custos WhatsApp</h2><p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Simule uma proposta comercial completa com atualização instantânea.</p></div>{children}<div className="mt-6 flex items-center justify-between"><button disabled={index === 0} onClick={() => navigate(calculatorSteps[index - 1])} className={`${ui.secondaryButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}><ArrowLeft size={16} />Voltar</button><span className="text-xs text-gray-400">Etapa {index + 1} de {calculatorSteps.length}</span><button disabled={index === calculatorSteps.length - 1} onClick={() => navigate(calculatorSteps[index + 1])} className={`${ui.createButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}>Próximo<ArrowRight size={16} /></button></div></div>;
 }
+
 
 
 

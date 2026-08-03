@@ -15,6 +15,7 @@
   compactCreateButton:
     'inline-flex h-10 w-40 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#0d8fe8] px-4 text-xs font-semibold leading-none text-white transition-colors hover:bg-[#087ac8] dark:bg-[#0d8fe8] dark:hover:bg-[#087ac8]',
   dangerIconButton:
-    'rounded p-1.5 text-gray-500 transition-colors hover:bg-error-50 hover:text-error-600 dark:text-gray-400 dark:hover:bg-error-500/10 dark:hover:text-error-400',
+    'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg p-0 text-gray-500 transition-colors hover:bg-error-50 hover:text-error-600 dark:text-gray-400 dark:hover:bg-error-500/10 dark:hover:text-error-400',
 };
+
 
