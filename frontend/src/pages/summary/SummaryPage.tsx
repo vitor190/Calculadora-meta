@@ -1,4 +1,5 @@
 ﻿import type { ReactNode } from 'react';
+import { ExternalLink } from 'lucide-react';
 import { CalculatorShell } from '../../components/calculator-ui';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
@@ -27,6 +28,21 @@ export function SummaryPage() {
   const selectedPlan = commercialCatalog.plans.find((plan) => plan.id === store.selectedPlanId);
   const addedResources = store.resources;
   const usedTemplates = store.templates.filter((template) => template.quantity > 0);
+  const openProposal = () => {
+    const proposal = {
+      currency: store.currency,
+      templates: store.templates,
+      selectedPlanId: store.selectedPlanId,
+      planValue: store.planValue,
+      resources: store.resources,
+      services: store.services,
+      planDiscountType: store.planDiscountType,
+      planDiscountValue: store.planDiscountValue,
+    };
+    const url = new URL('/proposta', window.location.origin);
+    url.searchParams.set('dados', JSON.stringify(proposal));
+    window.open(url.toString(), '_blank', 'noopener,noreferrer');
+  };
   return <CalculatorShell>
     <section className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
       <div className="flex flex-col gap-4 border-b border-gray-100 px-5 py-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="font-semibold text-gray-900 dark:text-white/90">Detalhamento financeiro</h3><p className="mt-1 text-xs text-gray-400">Itens adicionados em cada categoria da proposta</p></div><span className="rounded-full bg-success-50 px-3 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-400">Atualizado em tempo real</span></div>
@@ -37,6 +53,7 @@ export function SummaryPage() {
         <DetailGroup label="Implantação" total={formatCurrency(totals.discountedServices, store.currency)} color="#f04438">{store.services.length ? store.services.map((item) => { const discount = discountAmount(item.value, item.discountType, item.discountValue); const netValue = item.value - discount; const discountedText = discount > 0 ? `Valor com desconto: ${formatCurrency(netValue, store.currency)}` : undefined; const installmentText = item.installments > 1 ? `${item.installments}x de ${formatCurrency(netValue / item.installments, store.currency)}` : undefined; return <DetailRow key={item.id} label={item.name || 'Implantação sem nome'} value={formatCurrency(item.value, store.currency)} helper={[discountedText, installmentText].filter(Boolean).join(' · ') || undefined} discount={discount > 0 ? `− ${formatCurrency(discount, store.currency)} de desconto` : undefined} />; }) : <EmptyDetail>Nenhuma implantação adicionada.</EmptyDetail>}</DetailGroup>
       </div>
       <div className="grid md:grid-cols-2"><div className="flex items-center justify-between gap-4 bg-brand-500 px-5 py-5 text-white"><div><p className="text-xs font-medium uppercase tracking-wider text-white/70">Total mensal</p><p className="mt-1 text-sm text-white/80">Meta, plano e produtos</p></div><strong className="text-xl font-semibold sm:text-2xl">{formatCurrency(totals.recurringTotal, store.currency)}</strong></div><div className="flex items-center justify-between gap-4 bg-[#087f8c] px-5 py-5 text-white"><div><p className="text-xs font-medium uppercase tracking-wider text-white/70">Implantação</p><p className="mt-1 text-sm text-white/80">Pagamento separado</p></div><strong className="text-xl font-semibold sm:text-2xl">{formatCurrency(totals.implementationTotal, store.currency)}</strong></div></div>
+      <div className="flex justify-end border-t border-gray-100 px-5 py-5 dark:border-gray-800"><button type="button" onClick={openProposal} className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Visualizar proposta<ExternalLink size={16} /></button></div>
     </section>
   </CalculatorShell>;
 }

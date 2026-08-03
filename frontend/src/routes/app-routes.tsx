@@ -4,11 +4,13 @@ import { InformationPage } from '../pages/information/InformationPage';
 import { MetaCostsPage } from '../pages/meta/MetaCostsPage';
 import { ProductsPage } from '../pages/products/ProductsPage';
 import { SummaryPage } from '../pages/summary/SummaryPage';
+import { ProposalPreviewPage } from '../pages/proposal/ProposalPreviewPage';
 
 export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/proposta" element={<ProposalPreviewPage />} />
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to="/calculadora/meta" replace />} />
           <Route path="/calculadora" element={<Navigate to="/calculadora/meta" replace />} />

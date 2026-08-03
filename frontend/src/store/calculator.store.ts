@@ -8,7 +8,7 @@ export interface ProposalItem { id: number; name: string; value: number; quantit
 export interface ExtraService { id: number; name: string; value: number; installments: number; discountType: DiscountType; discountValue: number; }
 export type DiscountType = 'none' | 'percent' | 'fixed';
 
-interface CalculatorState {
+export interface CalculatorState {
   currency: CurrencyCode;
   templates: TemplateCost[];
   selectedPlanId: string;
