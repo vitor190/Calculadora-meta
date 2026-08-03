@@ -5,7 +5,7 @@ import { formatCurrency, type CurrencyCode } from '../../lib/currency';
 import { calculateTotals, type CalculatorState, type DiscountType, type ExtraService, type ProposalItem, type TemplateCost } from '../../store/calculator.store';
 import { useTheme } from '../../store/theme.store';
 
-interface ProposalSnapshot { currency: CurrencyCode; templates: TemplateCost[]; selectedPlanId: string; planValue: number; resources: ProposalItem[]; services: ExtraService[]; planDiscountType: DiscountType; planDiscountValue: number; }
+interface ProposalSnapshot { currency: CurrencyCode; templates: TemplateCost[]; selectedPlanId: string; planValue: number; resources: ProposalItem[]; services: ExtraService[]; implementationInstallments: number; planDiscountType: DiscountType; planDiscountValue: number; }
 
 function discountAmount(value: number, type: DiscountType, discount: number) {
   const requested = type === 'percent' ? value * Math.min(discount, 100) / 100 : type === 'fixed' ? discount : 0;
@@ -17,7 +17,9 @@ function readProposal(): ProposalSnapshot | null {
     const value = new URLSearchParams(window.location.search).get('dados');
     if (!value) return null;
     const data = JSON.parse(value) as ProposalSnapshot;
-    return data.currency && Array.isArray(data.templates) && Array.isArray(data.resources) && Array.isArray(data.services) ? data : null;
+    if (!(data.currency && Array.isArray(data.templates) && Array.isArray(data.resources) && Array.isArray(data.services))) return null;
+    data.implementationInstallments = data.implementationInstallments ?? 1;
+    return data;
   } catch { return null; }
 }
 
@@ -67,7 +69,7 @@ export function ProposalPreviewPage() {
           <Section title="Plano Conexa">{selectedPlan ? <><Row title={selectedPlan.name} description={selectedPlan.tagline} value={formatCurrency(totals.discountedPlan, currency)} secondary={totals.planDiscount > 0 ? `${formatCurrency(totals.planDiscount, currency)} de desconto` : undefined} /><div className="grid gap-2 py-4 sm:grid-cols-2">{selectedPlan.features.map((feature) => <div key={feature} className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300"><Check size={14} className="text-success-600 dark:text-success-400" />{feature}</div>)}</div></> : <p className={emptyClass}>Nenhum plano selecionado.</p>}</Section>
           <Section title="Custos da Meta">{templates.length ? templates.map((item) => <Row key={item.id} title={item.category} description={`${item.quantity} template${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, currency)}`} value={formatCurrency(item.value * item.quantity, currency)} />) : <p className={emptyClass}>Nenhum template informado.</p>}</Section>
           <Section title="Produtos adicionais">{proposal.resources.length ? proposal.resources.map((item) => { const gross = item.value * item.quantity; const discount = discountAmount(gross, item.discountType, item.discountValue); return <Row key={item.id} title={item.name || 'Produto adicional'} description={`${item.quantity} unidade${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, currency)}${discount ? ` · Valor original: ${formatCurrency(gross, currency)}` : ''}`} value={formatCurrency(gross - discount, currency)} secondary={discount ? `${formatCurrency(discount, currency)} de desconto` : undefined} />; }) : <p className={emptyClass}>Nenhum produto adicional.</p>}</Section>
-          <Section title="Implantação">{proposal.services.length ? proposal.services.map((item) => { const discount = discountAmount(item.value, item.discountType, item.discountValue); const net = item.value - discount; const installments = item.installments > 1 ? `${item.installments}x de ${formatCurrency(net / item.installments, currency)}` : 'Pagamento único'; return <Row key={item.id} title={item.name || 'Implantação'} description={`${installments}${discount ? ` · Valor original: ${formatCurrency(item.value, currency)}` : ''}`} value={formatCurrency(net, currency)} secondary={discount ? `${formatCurrency(discount, currency)} de desconto` : undefined} />; }) : <p className={emptyClass}>Nenhuma implantação adicionada.</p>}</Section>
+          <Section title="Implantação">{proposal.services.length ? <>{proposal.services.map((item) => { const discount = discountAmount(item.value, item.discountType, item.discountValue); const net = item.value - discount; return <Row key={item.id} title={item.name || 'Implantação'} description={discount ? `Valor original: ${formatCurrency(item.value, currency)}` : undefined} value={formatCurrency(net, currency)} secondary={discount ? `${formatCurrency(discount, currency)} de desconto` : undefined} />; })}<Row title="Parcelamento total" description="Aplicado ao valor total da implantação" value={proposal.implementationInstallments > 1 ? `${proposal.implementationInstallments}x de ${formatCurrency(totals.implementationTotal / proposal.implementationInstallments, currency)}` : 'Pagamento único'} /></> : <p className={emptyClass}>Nenhuma implantação adicionada.</p>}</Section>
         </div>
         <footer className="border-t border-gray-100 px-7 py-6 text-center text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">Proposta comercial gerada pela Infarma Sistemas de Gestão. Valores apresentados em {currency}.</footer>
       </article>

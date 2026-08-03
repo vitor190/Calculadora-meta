@@ -5,7 +5,7 @@ import { commercialCatalog } from '../lib/commercial-catalog';
 
 export interface TemplateCost { id: string; category: string; value: number; quantity: number; }
 export interface ProposalItem { id: number; name: string; value: number; quantity: number; discountType: DiscountType; discountValue: number; }
-export interface ExtraService { id: number; name: string; value: number; installments: number; discountType: DiscountType; discountValue: number; }
+export interface ExtraService { id: number; name: string; value: number; discountType: DiscountType; discountValue: number; }
 export type DiscountType = 'none' | 'percent' | 'fixed';
 
 export interface CalculatorState {
@@ -15,6 +15,7 @@ export interface CalculatorState {
   planValue: number;
   resources: ProposalItem[];
   services: ExtraService[];
+  implementationInstallments: number;
   planDiscountType: DiscountType;
   planDiscountValue: number;
   setCurrency: (currency: CurrencyCode) => void;
@@ -27,6 +28,7 @@ export interface CalculatorState {
   addService: () => void;
   updateService: (service: ExtraService) => void;
   removeService: (id: number) => void;
+  setImplementationInstallments: (installments: number) => void;
   setPlanDiscountType: (type: DiscountType) => void;
   setPlanDiscountValue: (value: number) => void;
 }
@@ -42,6 +44,7 @@ export const useCalculator = create<CalculatorState>((set) => ({
   planValue: 0,
   resources: [],
   services: [],
+  implementationInstallments: 1,
   planDiscountType: 'none',
   planDiscountValue: 0,
   setCurrency: (currency) => set((state) => ({ currency, templates: state.templates.map((item) => ({ ...item, value: getMetaPriceInBrl(item.id as MetaCategory, currency) })) })),
@@ -51,9 +54,10 @@ export const useCalculator = create<CalculatorState>((set) => ({
   updateResource: (resource) => set((state) => ({ resources: state.resources.map((item) => item.id === resource.id ? resource : item) })),
   addResource: () => set((state) => ({ resources: [...state.resources, { id: Date.now(), name: '', value: 0, quantity: 0, discountType: 'none', discountValue: 0 }] })),
   removeResource: (id) => set((state) => ({ resources: state.resources.filter((item) => item.id !== id) })),
-  addService: () => set((state) => ({ services: [...state.services, { id: Date.now(), name: '', value: 0, installments: 1, discountType: 'none', discountValue: 0 }] })),
+  addService: () => set((state) => ({ services: [...state.services, { id: Date.now(), name: '', value: 0, discountType: 'none', discountValue: 0 }] })),
   updateService: (service) => set((state) => ({ services: state.services.map((item) => item.id === service.id ? service : item) })),
   removeService: (id) => set((state) => ({ services: state.services.filter((item) => item.id !== id) })),
+  setImplementationInstallments: (implementationInstallments) => set({ implementationInstallments }),
   setPlanDiscountType: (planDiscountType) => set({ planDiscountType, planDiscountValue: 0 }),
   setPlanDiscountValue: (planDiscountValue) => set({ planDiscountValue }),
 }));
