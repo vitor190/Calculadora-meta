@@ -6,10 +6,10 @@ import { convertFromBrl, convertToBrl, getCurrencySymbol } from '../lib/currency
 import { useCalculator } from '../store/calculator.store';
 
 export const calculatorSteps = [
+  '/calculadora/informacoes',
   '/calculadora/meta',
   '/calculadora/produtos',
   '/calculadora/resumo',
-  '/calculadora/informacoes',
 ];
 export const numberValue = (value: string) => Math.max(0, Number(value) || 0);
 export const preventInvalidNumberKeys = (
@@ -202,22 +202,25 @@ export function CalculatorShell({ children }: { children: ReactNode }) {
         </p>
       </div>
       {children}
-      <div className="mt-6 flex items-center justify-between">
-        <button
-          disabled={index === 0}
-          onClick={() => navigate(calculatorSteps[index - 1])}
-          className={`${ui.secondaryButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}
-        >
-          <ArrowLeft size={16} />
-          Voltar
-        </button>
-        <span className="text-xs text-gray-400">
+      <div className="mt-6 grid grid-cols-3 items-center">
+        <div>
+          {index > 0 && (
+            <button
+              onClick={() => navigate(calculatorSteps[index - 1])}
+              className={`${ui.secondaryButton} h-10`}
+            >
+              <ArrowLeft size={16} />
+              Voltar
+            </button>
+          )}
+        </div>
+        <span className="justify-self-center text-xs text-gray-400">
           Etapa {index + 1} de {calculatorSteps.length}
         </span>
         <button
           disabled={index === calculatorSteps.length - 1}
           onClick={() => navigate(calculatorSteps[index + 1])}
-          className={`${ui.createButton} h-10 disabled:cursor-not-allowed disabled:opacity-40`}
+          className={`${ui.createButton} h-10 justify-self-end disabled:cursor-not-allowed disabled:opacity-40`}
         >
           Próximo
           <ArrowRight size={16} />

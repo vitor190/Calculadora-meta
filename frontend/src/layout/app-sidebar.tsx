@@ -3,10 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { useSidebar } from '../store/sidebar.store';
 
 const navItems = [
+  { label: 'Informações', path: '/calculadora/informacoes', icon: BookOpen },
   { label: 'Custos da Meta', path: '/calculadora/meta', icon: CircleDollarSign },
   { label: 'Proposta Conexa', path: '/calculadora/produtos', icon: PackageOpen },
   { label: 'Resumo financeiro', path: '/calculadora/resumo', icon: FileText },
-  { label: 'Informações', path: '/calculadora/informacoes', icon: BookOpen },
 ];
 
 export function AppSidebar() {
@@ -25,7 +25,7 @@ export function AppSidebar() {
         className={`flex items-center border-b border-white/10 px-6 py-8 ${!showText ? 'lg:justify-center' : 'justify-start'}`}
       >
         <Link
-          to="/calculadora/meta"
+          to="/calculadora/informacoes"
           className="flex w-full min-w-0 items-center gap-3"
         >
           <img

@@ -10,18 +10,56 @@ export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/proposta" element={<ProposalPreviewPage />} />
+        <Route
+          path="/proposta"
+          element={<ProposalPreviewPage />}
+        />
         <Route element={<AppLayout />}>
-          <Route index element={<Navigate to="/calculadora/meta" replace />} />
-          <Route path="/calculadora" element={<Navigate to="/calculadora/meta" replace />} />
-          <Route path="/calculadora/meta" element={<MetaCostsPage />} />
-          <Route path="/calculadora/produtos" element={<ProductsPage />} />
-          <Route path="/calculadora/resumo" element={<SummaryPage />} />
-          <Route path="/calculadora/informacoes" element={<InformationPage />} />
+          <Route
+            index
+            element={
+              <Navigate
+                to="/calculadora/informacoes"
+                replace
+              />
+            }
+          />
+          <Route
+            path="/calculadora"
+            element={
+              <Navigate
+                to="/calculadora/informacoes"
+                replace
+              />
+            }
+          />
+          <Route
+            path="/calculadora/meta"
+            element={<MetaCostsPage />}
+          />
+          <Route
+            path="/calculadora/produtos"
+            element={<ProductsPage />}
+          />
+          <Route
+            path="/calculadora/resumo"
+            element={<SummaryPage />}
+          />
+          <Route
+            path="/calculadora/informacoes"
+            element={<InformationPage />}
+          />
         </Route>
-        <Route path="*" element={<Navigate to="/calculadora/meta" replace />} />
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/calculadora/informacoes"
+              replace
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
 }
-
