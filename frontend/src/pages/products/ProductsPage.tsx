@@ -352,7 +352,10 @@ export function ProductsPage() {
                   onClick={store.addResource}
                   className={ui.compactCreateButton}
                 >
-                  <Plus size={16} />
+                  <Plus
+                    size={16}
+                    className="shrink-0"
+                  />
                   Adicionar produto
                 </button>
               }
@@ -388,7 +391,10 @@ export function ProductsPage() {
                   onClick={store.addService}
                   className={ui.compactCreateButton}
                 >
-                  <Plus size={16} />
+                  <Plus
+                    size={16}
+                    className="shrink-0"
+                  />
                   Adicionar implantação
                 </button>
               }

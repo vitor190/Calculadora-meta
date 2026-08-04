@@ -90,11 +90,6 @@ export function CurrencyInput({
   const currency = useCalculator((state) => state.currency);
   const displayValue = Number(convertFromBrl(value, currency).toFixed(6));
   const [draft, setDraft] = useState<string | null>(null);
-  const changeByStep = (direction: 1 | -1) => {
-    const next = Math.max(0, Number((displayValue + direction * 0.01).toFixed(6)));
-    setDraft(null);
-    onChange(convertToBrl(next, currency));
-  };
   return (
     <div className="relative">
       <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-gray-400">
@@ -102,7 +97,7 @@ export function CurrencyInput({
       </span>
       <input
         aria-label={label}
-        className={`${ui.input} pl-11 pr-10 focus:opacity-100 ${draft === null && displayValue === 0 ? 'opacity-50' : 'opacity-100'}`}
+        className={`${ui.input} pl-11 focus:opacity-100 ${draft === null && displayValue === 0 ? 'opacity-50' : 'opacity-100'}`}
         type="number"
         min="0"
         step="0.01"
@@ -125,12 +120,6 @@ export function CurrencyInput({
           setDraft(next);
           if (next !== '') onChange(convertToBrl(numberValue(next), currency));
         }}
-      />
-      <NumberStepper
-        label="valor"
-        onIncrement={() => changeByStep(1)}
-        onDecrement={() => changeByStep(-1)}
-        decrementDisabled={displayValue <= 0}
       />
     </div>
   );
@@ -190,6 +179,7 @@ interface NumberInputProps {
   min?: number;
   max?: number;
   zeroPlaceholder?: boolean;
+  showStepper?: boolean;
   className?: string;
 }
 
@@ -201,6 +191,7 @@ export function NumberInput({
   min = 0,
   max,
   zeroPlaceholder = false,
+  showStepper = true,
   className = '',
 }: NumberInputProps) {
   const [draft, setDraft] = useState<string | null>(null);
@@ -216,7 +207,7 @@ export function NumberInput({
     <div className="relative">
       <input
         aria-label={label}
-        className={`${ui.input} pr-10 focus:opacity-100 ${draft === null && value === 0 ? 'opacity-50' : 'opacity-100'} ${className}`}
+        className={`${ui.input} ${showStepper ? 'pr-10' : 'pr-3'} focus:opacity-100 ${draft === null && value === 0 ? 'opacity-50' : 'opacity-100'} ${className}`}
         type="number"
         min={min}
         max={max}
@@ -252,13 +243,15 @@ export function NumberInput({
           onChange(bounded);
         }}
       />
-      <NumberStepper
-        label={label.toLocaleLowerCase('pt-BR')}
-        onIncrement={() => changeByStep(1)}
-        onDecrement={() => changeByStep(-1)}
-        incrementDisabled={max !== undefined && value >= max}
-        decrementDisabled={value <= (zeroPlaceholder ? 0 : min)}
-      />
+      {showStepper && (
+        <NumberStepper
+          label={label.toLocaleLowerCase('pt-BR')}
+          onIncrement={() => changeByStep(1)}
+          onDecrement={() => changeByStep(-1)}
+          incrementDisabled={max !== undefined && value >= max}
+          decrementDisabled={value <= (zeroPlaceholder ? 0 : min)}
+        />
+      )}
     </div>
   );
 }

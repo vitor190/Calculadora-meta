@@ -48,6 +48,7 @@ export function DiscountFields({
               label={title}
               className="pr-9"
               max={100}
+              showStepper={false}
               value={value}
               onChange={onValueChange}
             />
