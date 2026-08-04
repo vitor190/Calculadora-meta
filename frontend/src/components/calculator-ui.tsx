@@ -189,7 +189,13 @@ export function NumberInput({
   );
 }
 
-export function CalculatorShell({ children }: { children: ReactNode }) {
+export function CalculatorShell({
+  children,
+  finalAction,
+}: {
+  children: ReactNode;
+  finalAction?: ReactNode;
+}) {
   const location = useLocation();
   const navigate = useNavigate();
   const index = Math.max(0, calculatorSteps.indexOf(location.pathname));
@@ -217,14 +223,17 @@ export function CalculatorShell({ children }: { children: ReactNode }) {
         <span className="justify-self-center text-xs text-gray-400">
           Etapa {index + 1} de {calculatorSteps.length}
         </span>
-        <button
-          disabled={index === calculatorSteps.length - 1}
-          onClick={() => navigate(calculatorSteps[index + 1])}
-          className={`${ui.createButton} h-10 justify-self-end disabled:cursor-not-allowed disabled:opacity-40`}
-        >
-          Próximo
-          <ArrowRight size={16} />
-        </button>
+        {index === calculatorSteps.length - 1 ? (
+          <div className="justify-self-end">{finalAction}</div>
+        ) : (
+          <button
+            onClick={() => navigate(calculatorSteps[index + 1])}
+            className={`${ui.createButton} h-10 justify-self-end`}
+          >
+            Próximo
+            <ArrowRight size={16} />
+          </button>
+        )}
       </div>
     </div>
   );

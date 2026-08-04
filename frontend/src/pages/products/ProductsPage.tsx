@@ -16,6 +16,7 @@ import {
   PageHeading,
 } from '../../components/calculator-ui';
 import { DiscountFields } from '../../components/discount-fields';
+import { ProductFinancialBreakdown } from '../../components/financial-detail';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency, type CurrencyCode } from '../../lib/currency';
 import { ui } from '../../lib/ui';
@@ -182,6 +183,13 @@ function ProductCard({
           currency={currency}
           onTypeChange={(discountType) => onChange({ ...item, discountType, discountValue: 0 })}
           onValueChange={(discountValue) => onChange({ ...item, discountValue })}
+        />
+      </div>
+      <div className="mt-3">
+        <ProductFinancialBreakdown
+          item={item}
+          currency={currency}
+          compact
         />
       </div>
     </div>

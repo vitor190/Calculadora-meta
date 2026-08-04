@@ -21,7 +21,18 @@ export function SummaryPage() {
     window.open(createProposalUrl(store), '_blank', 'noopener,noreferrer');
   };
   return (
-    <CalculatorShell>
+    <CalculatorShell
+      finalAction={
+        <button
+          type="button"
+          onClick={openProposal}
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-semibold text-white transition hover:bg-brand-600"
+        >
+          Visualizar proposta
+          <ExternalLink size={16} />
+        </button>
+      }
+    >
       <section className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
         <div className="flex flex-col gap-4 border-b border-gray-100 px-5 py-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -36,7 +47,7 @@ export function SummaryPage() {
             Atualizado em tempo real
           </span>
         </div>
-        <div className="divide-y divide-gray-100 px-5 dark:divide-gray-800">
+        <div className="grid items-start gap-4 p-5">
           <FinancialDetailGroup
             label="Custos da Meta"
             total={formatCurrency(totals.meta, store.currency)}
@@ -47,8 +58,12 @@ export function SummaryPage() {
                 <FinancialDetailRow
                   key={item.id}
                   label={item.category}
-                  helper={`${item.quantity} template${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, store.currency)}`}
+                  details={[
+                    { label: 'Quantidade', value: String(item.quantity) },
+                    { label: 'Valor unitário', value: formatCurrency(item.value, store.currency) },
+                  ]}
                   value={formatCurrency(item.value * item.quantity, store.currency)}
+                  valueLabel="Total do item"
                 />
               ))
             ) : (
@@ -64,17 +79,27 @@ export function SummaryPage() {
               <>
                 <FinancialDetailRow
                   label={selectedPlan.name}
-                  helper="Valor mensal da proposta"
+                  details={[
+                    {
+                      label: 'Valor mensal',
+                      value: formatCurrency(store.planValue, store.currency),
+                    },
+                    ...(totals.planDiscount > 0
+                      ? [
+                          {
+                            label: 'Desconto',
+                            value: `− ${formatCurrency(totals.planDiscount, store.currency)}`,
+                            highlight: true,
+                          },
+                        ]
+                      : []),
+                  ]}
                   value={
                     store.planValue > 0
-                      ? formatCurrency(store.planValue, store.currency)
+                      ? formatCurrency(totals.discountedPlan, store.currency)
                       : 'Nenhum valor adicionado'
                   }
-                  discount={
-                    totals.planDiscount > 0
-                      ? `− ${formatCurrency(totals.planDiscount, store.currency)} de desconto`
-                      : undefined
-                  }
+                  valueLabel="Mensalidade líquida"
                 />
                 <div className="mt-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
                   <div className="grid grid-cols-[1fr_auto] gap-4 bg-gray-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:bg-white/[0.03]">
@@ -114,18 +139,29 @@ export function SummaryPage() {
                   item.discountValue,
                 );
                 const netValue = grossValue - discount;
-                const quantityText = `${item.quantity} unidade${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, store.currency)}`;
                 return (
                   <FinancialDetailRow
                     key={item.id}
                     label={item.name || 'Produto sem nome'}
-                    value={formatCurrency(grossValue, store.currency)}
-                    helper={quantityText}
-                    discount={
-                      discount > 0
-                        ? `− ${formatCurrency(discount, store.currency)} de desconto · Final: ${formatCurrency(netValue, store.currency)}`
-                        : undefined
-                    }
+                    details={[
+                      { label: 'Quantidade', value: String(item.quantity) },
+                      {
+                        label: 'Valor unitário',
+                        value: formatCurrency(item.value, store.currency),
+                      },
+                      { label: 'Valor bruto', value: formatCurrency(grossValue, store.currency) },
+                      ...(discount > 0
+                        ? [
+                            {
+                              label: 'Desconto',
+                              value: `− ${formatCurrency(discount, store.currency)}`,
+                              highlight: true,
+                            },
+                          ]
+                        : []),
+                    ]}
+                    value={formatCurrency(netValue, store.currency)}
+                    valueLabel="Subtotal líquido"
                   />
                 );
               })
@@ -151,28 +187,37 @@ export function SummaryPage() {
                     <FinancialDetailRow
                       key={item.id}
                       label={item.name || 'Implantação sem nome'}
-                      value={formatCurrency(item.value, store.currency)}
-                      helper={
-                        discount > 0
-                          ? `Valor com desconto: ${formatCurrency(netValue, store.currency)}`
-                          : undefined
-                      }
-                      discount={
-                        discount > 0
-                          ? `− ${formatCurrency(discount, store.currency)} de desconto`
-                          : undefined
-                      }
+                      details={[
+                        { label: 'Valor bruto', value: formatCurrency(item.value, store.currency) },
+                        ...(discount > 0
+                          ? [
+                              {
+                                label: 'Desconto',
+                                value: `− ${formatCurrency(discount, store.currency)}`,
+                                highlight: true,
+                              },
+                            ]
+                          : []),
+                      ]}
+                      value={formatCurrency(netValue, store.currency)}
+                      valueLabel="Subtotal líquido"
                     />
                   );
                 })}
                 <FinancialDetailRow
                   label="Parcelamento total"
-                  helper="Aplicado ao total da implantação"
+                  details={[
+                    {
+                      label: 'Total da implantação',
+                      value: formatCurrency(totals.implementationTotal, store.currency),
+                    },
+                  ]}
                   value={
                     store.implementationInstallments > 1
                       ? `${store.implementationInstallments}x de ${formatCurrency(totals.implementationTotal / store.implementationInstallments, store.currency)}`
                       : 'Pagamento único'
                   }
+                  valueLabel="Condição de pagamento"
                 />
               </>
             ) : (
@@ -209,16 +254,6 @@ export function SummaryPage() {
               {formatCurrency(totals.implementationTotal, store.currency)}
             </strong>
           </div>
-        </div>
-        <div className="flex justify-end border-t border-gray-100 px-5 py-5 dark:border-gray-800">
-          <button
-            type="button"
-            onClick={openProposal}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600"
-          >
-            Visualizar proposta
-            <ExternalLink size={16} />
-          </button>
         </div>
       </section>
     </CalculatorShell>
