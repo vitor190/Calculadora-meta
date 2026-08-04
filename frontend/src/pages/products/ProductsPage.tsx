@@ -16,10 +16,14 @@ import {
   PageHeading,
 } from '../../components/calculator-ui';
 import { DiscountFields } from '../../components/discount-fields';
-import { ProductFinancialBreakdown } from '../../components/financial-detail';
+import {
+  CompactFinancialBreakdown,
+  ProductFinancialBreakdown,
+} from '../../components/financial-detail';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency, type CurrencyCode } from '../../lib/currency';
 import { ui } from '../../lib/ui';
+import { calculateDiscount } from '../../services/calculator.service';
 import { useCalculator } from '../../store/calculator.store';
 import type { ExtraService, ProposalItem } from '../../types/calculator.types';
 
@@ -208,6 +212,7 @@ function ImplementationCard({
   onRemove: () => void;
 }) {
   const name = item.name || 'implantação';
+  const discount = calculateDiscount(item.value, item.discountType, item.discountValue);
   return (
     <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02]">
       <div className="grid gap-3 sm:grid-cols-[1fr_1fr_36px]">
@@ -242,12 +247,25 @@ function ImplementationCard({
           onValueChange={(discountValue) => onChange({ ...item, discountValue })}
         />
       </div>
+      <div className="mt-3">
+        <CompactFinancialBreakdown
+          grossValue={item.value}
+          discount={discount}
+          netValue={item.value - discount}
+          currency={currency}
+        />
+      </div>
     </div>
   );
 }
 
 export function ProductsPage() {
   const store = useCalculator();
+  const planDiscount = calculateDiscount(
+    store.planValue,
+    store.planDiscountType,
+    store.planDiscountValue,
+  );
 
   return (
     <CalculatorShell>
@@ -334,6 +352,16 @@ export function ProductsPage() {
                   currency={store.currency}
                   onTypeChange={store.setPlanDiscountType}
                   onValueChange={store.setPlanDiscountValue}
+                />
+              </div>
+              <div className="md:col-span-2">
+                <CompactFinancialBreakdown
+                  grossValue={store.planValue}
+                  discount={planDiscount}
+                  netValue={store.planValue - planDiscount}
+                  currency={store.currency}
+                  grossLabel="Mensalidade bruta"
+                  netLabel="Mensalidade líquida"
                 />
               </div>
             </div>

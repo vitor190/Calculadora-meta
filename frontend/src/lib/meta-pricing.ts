@@ -8,8 +8,6 @@ export const META_PRICING_REFERENCE = 'Tabela da Meta para o Brasil — 2026';
 
 export const metaBrazilPricesByCurrency = {
   BRL: { marketing: 0.3217, utility: 0.035, authentication: 0.035 },
-  USD: { marketing: 0.0625, utility: 0.0068, authentication: 0.0068 },
-  EUR: { marketing: 0.0518, utility: 0.0056, authentication: 0.0056 },
 } as const satisfies Record<CurrencyCode, Record<string, number>>;
 
 export type MetaCategory = keyof (typeof metaBrazilPricesByCurrency)['BRL'];

@@ -84,6 +84,43 @@ interface ProductFinancialBreakdownProps extends ProductFinancialCardProps {
   compact?: boolean;
 }
 
+interface CompactFinancialBreakdownProps {
+  grossValue: number;
+  discount: number;
+  netValue: number;
+  currency: CurrencyCode;
+  grossLabel?: string;
+  netLabel?: string;
+}
+
+export function CompactFinancialBreakdown({
+  grossValue,
+  discount,
+  netValue,
+  currency,
+  grossLabel = 'Bruto',
+  netLabel = 'Subtotal',
+}: CompactFinancialBreakdownProps) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-xs dark:border-gray-800 dark:bg-gray-900">
+      <span className="text-gray-500 dark:text-gray-400">
+        {grossLabel}:{' '}
+        <strong className="tabular-nums text-gray-700 dark:text-gray-200">
+          {formatCurrency(grossValue, currency)}
+        </strong>
+      </span>
+      {discount > 0 && (
+        <span className="tabular-nums text-brand-600 dark:text-brand-400">
+          Desconto: − {formatCurrency(discount, currency)}
+        </span>
+      )}
+      <span className="font-semibold text-gray-900 dark:text-white">
+        {netLabel}: <span className="tabular-nums">{formatCurrency(netValue, currency)}</span>
+      </span>
+    </div>
+  );
+}
+
 export function ProductFinancialBreakdown({
   item,
   currency,
@@ -99,22 +136,12 @@ export function ProductFinancialBreakdown({
 
   if (compact)
     return (
-      <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-xs dark:border-gray-800 dark:bg-gray-900">
-        <span className="text-gray-500 dark:text-gray-400">
-          Bruto:{' '}
-          <strong className="text-gray-700 dark:text-gray-200">
-            {formatCurrency(grossValue, currency)}
-          </strong>
-        </span>
-        {discount > 0 && (
-          <span className="text-brand-600 dark:text-brand-400">
-            Desconto: − {formatCurrency(discount, currency)}
-          </span>
-        )}
-        <span className="font-semibold text-gray-900 dark:text-white">
-          Subtotal: {formatCurrency(netValue, currency)}
-        </span>
-      </div>
+      <CompactFinancialBreakdown
+        grossValue={grossValue}
+        discount={discount}
+        netValue={netValue}
+        currency={currency}
+      />
     );
 
   return (

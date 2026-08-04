@@ -1,13 +1,12 @@
 ﻿import { ExternalLink, Info, RotateCcw } from 'lucide-react';
 import {
-  AnimatedSelect,
   CalculatorCard,
   CalculatorShell,
   CurrencyInput,
   NumberInput,
   PageHeading,
 } from '../../components/calculator-ui';
-import { currencies, formatCurrency, isCurrencyCode } from '../../lib/currency';
+import { formatCurrency } from '../../lib/currency';
 import {
   META_PRICING_REFERENCE,
   META_PRICING_SOURCE_URL,
@@ -25,37 +24,10 @@ export function MetaCostsPage() {
       <CalculatorCard>
         <PageHeading
           title="Custos da Meta"
-          description="Tarifas oficiais da Meta para o Brasil na moeda de cobrança selecionada."
+          description="Tarifas oficiais da Meta para o Brasil em Real brasileiro (BRL)."
         />
         <div className="p-5 md:p-6">
-          <div className="grid gap-4 lg:grid-cols-[minmax(15rem,.75fr)_minmax(0,1.75fr)]">
-            <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02]">
-              <label
-                className="text-[11px] font-semibold uppercase tracking-wider text-gray-400"
-                htmlFor="display-currency"
-              >
-                Moeda de exibição
-              </label>
-              <div className="mt-3">
-                <AnimatedSelect
-                  id="display-currency"
-                  value={store.currency}
-                  onChange={(event) => {
-                    if (isCurrencyCode(event.target.value)) store.setCurrency(event.target.value);
-                  }}
-                >
-                  {currencies.map((currency) => (
-                    <option
-                      key={currency.code}
-                      value={currency.code}
-                    >
-                      {currency.code} — {currency.name}
-                    </option>
-                  ))}
-                </AnimatedSelect>
-              </div>
-            </section>
-
+          <div>
             <aside className="flex flex-col gap-4 rounded-xl border border-brand-100 bg-brand-50/70 p-4 dark:border-brand-500/20 dark:bg-brand-500/10 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex min-w-0 items-start gap-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
