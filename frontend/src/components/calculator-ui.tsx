@@ -1,5 +1,5 @@
 ﻿import { useState, type KeyboardEvent, type ReactNode, type SelectHTMLAttributes } from 'react';
-import { ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
 import { ui } from '../lib/ui';
 import { convertFromBrl, convertToBrl, getCurrencySymbol } from '../lib/currency';
@@ -90,6 +90,11 @@ export function CurrencyInput({
   const currency = useCalculator((state) => state.currency);
   const displayValue = Number(convertFromBrl(value, currency).toFixed(6));
   const [draft, setDraft] = useState<string | null>(null);
+  const changeByStep = (direction: 1 | -1) => {
+    const next = Math.max(0, Number((displayValue + direction * 0.01).toFixed(6)));
+    setDraft(null);
+    onChange(convertToBrl(next, currency));
+  };
   return (
     <div className="relative">
       <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-gray-400">
@@ -97,7 +102,7 @@ export function CurrencyInput({
       </span>
       <input
         aria-label={label}
-        className={`${ui.input} pl-11 focus:opacity-100 ${draft === null && displayValue === 0 ? 'opacity-50' : 'opacity-100'}`}
+        className={`${ui.input} pl-11 pr-10 focus:opacity-100 ${draft === null && displayValue === 0 ? 'opacity-50' : 'opacity-100'}`}
         type="number"
         min="0"
         step="0.01"
@@ -121,7 +126,59 @@ export function CurrencyInput({
           if (next !== '') onChange(convertToBrl(numberValue(next), currency));
         }}
       />
+      <NumberStepper
+        label="valor"
+        onIncrement={() => changeByStep(1)}
+        onDecrement={() => changeByStep(-1)}
+        decrementDisabled={displayValue <= 0}
+      />
     </div>
+  );
+}
+
+function NumberStepper({
+  label,
+  onIncrement,
+  onDecrement,
+  incrementDisabled = false,
+  decrementDisabled = false,
+}: {
+  label: string;
+  onIncrement: () => void;
+  onDecrement: () => void;
+  incrementDisabled?: boolean;
+  decrementDisabled?: boolean;
+}) {
+  const buttonClass =
+    'flex h-1/2 w-9 items-center justify-center text-gray-400 transition hover:text-brand-500 focus-visible:z-10 focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-30 dark:hover:text-brand-400';
+
+  return (
+    <span className="absolute inset-y-1 right-1 flex w-9 flex-col">
+      <button
+        type="button"
+        className={buttonClass}
+        aria-label={`Aumentar ${label}`}
+        onClick={onIncrement}
+        disabled={incrementDisabled}
+      >
+        <ChevronUp
+          size={13}
+          strokeWidth={2.25}
+        />
+      </button>
+      <button
+        type="button"
+        className={buttonClass}
+        aria-label={`Diminuir ${label}`}
+        onClick={onDecrement}
+        disabled={decrementDisabled}
+      >
+        <ChevronDown
+          size={13}
+          strokeWidth={2.25}
+        />
+      </button>
+    </span>
   );
 }
 
@@ -147,45 +204,62 @@ export function NumberInput({
   className = '',
 }: NumberInputProps) {
   const [draft, setDraft] = useState<string | null>(null);
+  const changeByStep = (direction: 1 | -1) => {
+    const step = integer ? 1 : 0.01;
+    const next = value + direction * step;
+    const lowerBound = zeroPlaceholder ? 0 : min;
+    const bounded = Math.max(lowerBound, max === undefined ? next : Math.min(max, next));
+    setDraft(null);
+    onChange(integer ? Math.floor(bounded) : Number(bounded.toFixed(2)));
+  };
   return (
-    <input
-      aria-label={label}
-      className={`${ui.input} focus:opacity-100 ${draft === null && value === 0 ? 'opacity-50' : 'opacity-100'} ${className}`}
-      type="number"
-      min={min}
-      max={max}
-      step={integer ? 1 : 0.01}
-      value={draft ?? value}
-      placeholder="0"
-      onFocus={(event) => {
-        if (value === 0) setDraft('');
-        else {
-          setDraft(String(value));
-          event.currentTarget.select();
-        }
-      }}
-      onBlur={() => {
-        if (draft === '') onChange(zeroPlaceholder ? 0 : min);
-        setDraft(null);
-      }}
-      onKeyDown={(event) => preventInvalidNumberKeys(event, !integer)}
-      onChange={(event) => {
-        const next = event.target.value;
-        if (next === '') {
-          setDraft('');
-          return;
-        }
-        const parsed = integer ? Math.floor(numberValue(next)) : numberValue(next);
-        if (zeroPlaceholder && parsed < min) {
-          setDraft('');
-          onChange(0);
-          return;
-        }
-        const bounded = Math.max(min, max === undefined ? parsed : Math.min(max, parsed));
-        setDraft(String(bounded));
-        onChange(bounded);
-      }}
-    />
+    <div className="relative">
+      <input
+        aria-label={label}
+        className={`${ui.input} pr-10 focus:opacity-100 ${draft === null && value === 0 ? 'opacity-50' : 'opacity-100'} ${className}`}
+        type="number"
+        min={min}
+        max={max}
+        step={integer ? 1 : 0.01}
+        value={draft ?? value}
+        placeholder="0"
+        onFocus={(event) => {
+          if (value === 0) setDraft('');
+          else {
+            setDraft(String(value));
+            event.currentTarget.select();
+          }
+        }}
+        onBlur={() => {
+          if (draft === '') onChange(zeroPlaceholder ? 0 : min);
+          setDraft(null);
+        }}
+        onKeyDown={(event) => preventInvalidNumberKeys(event, !integer)}
+        onChange={(event) => {
+          const next = event.target.value;
+          if (next === '') {
+            setDraft('');
+            return;
+          }
+          const parsed = integer ? Math.floor(numberValue(next)) : numberValue(next);
+          if (zeroPlaceholder && parsed < min) {
+            setDraft('');
+            onChange(0);
+            return;
+          }
+          const bounded = Math.max(min, max === undefined ? parsed : Math.min(max, parsed));
+          setDraft(String(bounded));
+          onChange(bounded);
+        }}
+      />
+      <NumberStepper
+        label={label.toLocaleLowerCase('pt-BR')}
+        onIncrement={() => changeByStep(1)}
+        onDecrement={() => changeByStep(-1)}
+        incrementDisabled={max !== undefined && value >= max}
+        decrementDisabled={value <= (zeroPlaceholder ? 0 : min)}
+      />
+    </div>
   );
 }
 
