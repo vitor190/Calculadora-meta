@@ -7,7 +7,6 @@
       tagline: 'Ideal para começar',
       featured: false,
       features: [
-        'Chatbot inteligente',
         'Integração com Infarma',
         '1 número de WhatsApp',
         '5 atendentes inclusos',
@@ -22,7 +21,6 @@
       tagline: 'Mais escolhido',
       featured: true,
       features: [
-        'Chatbot inteligente',
         'Integração com Infarma',
         '3 números de WhatsApp',
         '15 atendentes inclusos',
@@ -37,7 +35,6 @@
       tagline: 'Solução sob medida',
       featured: false,
       features: [
-        'Chatbot inteligente',
         'Integração com Infarma',
         'Números de WhatsApp sob medida',
         'Atendentes sob medida',
