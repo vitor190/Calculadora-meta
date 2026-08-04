@@ -12,14 +12,18 @@ const actionClass =
 function Section({
   title,
   eyebrow,
+  className = '',
   children,
 }: {
   title: string;
   eyebrow: string;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <section className="proposal-section overflow-hidden rounded-2xl bg-gray-50/80 ring-1 ring-gray-200 shadow-sm shadow-gray-200/40 dark:bg-gray-950/50 dark:ring-gray-700 dark:shadow-none">
+    <section
+      className={`proposal-section overflow-hidden rounded-2xl bg-gray-50/80 ring-1 ring-gray-200 shadow-sm shadow-gray-200/40 dark:bg-gray-950/50 dark:ring-gray-700 dark:shadow-none ${className}`}
+    >
       <header className="flex items-center gap-3 border-b border-gray-200 bg-white/90 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/90 sm:px-6">
         <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-brand-50 px-2 text-[10px] font-bold tracking-wider text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">
           {eyebrow}
@@ -179,54 +183,72 @@ export function ProposalPreviewPage() {
         {`@media print {
           html, body { width: 100%; height: 100%; background: #fff !important; }
           body { margin: 0 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          main { min-height: 0 !important; background: #fff !important; background-image: none !important; color: #101828 !important; }
           .proposal-actions { display: none !important; }
           .proposal-page { width: 100% !important; max-width: none !important; padding: 0 !important; }
           .proposal-card, .proposal-section { background: #fff !important; color: #101828 !important; box-shadow: none !important; }
-          .proposal-card { border: 0 !important; border-radius: 0 !important; }
-          .proposal-section { border-color: #d0d5dd !important; }
+          .proposal-card { width: 100% !important; padding-bottom: 7mm !important; border: 0 !important; border-radius: 0 !important; }
+          .proposal-section { border: 1px solid #d0d5dd !important; background: #fff !important; }
           .proposal-section *, .proposal-summary * { border-color: #e4e7ec !important; color: #344054 !important; }
-          .proposal-header { min-height: 0 !important; padding: 3mm 5mm !important; background: #fff !important; border-bottom: 1px solid #d0d5dd !important; color: #101828 !important; }
-          .proposal-header img { width: 28mm !important; height: 9mm !important; }
+          .proposal-section > header { background: #eef2f6 !important; border-color: #cfd6df !important; }
+          .proposal-section > header span { background: #dbeafe !important; color: #075985 !important; }
+          .proposal-section > header h3 { color: #162345 !important; }
+          .proposal-header { min-height: 0 !important; padding: 3mm 6mm !important; background: #fff !important; border-bottom: 1px solid #d0d5dd !important; color: #101828 !important; }
+          .proposal-header img { width: 15mm !important; height: 15mm !important; }
           .proposal-header img { filter: none !important; }
           .proposal-header * { color: #344054 !important; }
-          .proposal-header h1 { margin-top: 0 !important; font-size: 16px !important; line-height: 1.1 !important; }
-          .proposal-summary { padding: 3mm 5mm !important; background: #f2f4f7 !important; }
-          .proposal-summary > div { gap: 4mm !important; }
-          .proposal-summary p { margin-top: 1mm !important; font-size: 8px !important; line-height: 1.25 !important; }
-          .proposal-summary .text-4xl, .proposal-summary .sm\\:text-5xl { font-size: 22px !important; }
-          .proposal-summary .text-2xl, .proposal-summary .sm\\:text-3xl { font-size: 16px !important; }
+          .proposal-header h1 { margin-top: .5mm !important; font-size: 19px !important; line-height: 1.1 !important; }
+          .proposal-header p { font-size: 8px !important; }
+          .proposal-summary { padding: 3mm 6mm !important; background: #e8edf3 !important; }
+          .proposal-summary > div { gap: 5mm !important; }
+          .proposal-summary .summary-card { padding: 2.5mm 4mm !important; border: 1px solid #98a2b3 !important; border-radius: 0 !important; }
+          .proposal-summary .summary-card:first-of-type { border-left: 1.5mm solid #0792f1 !important; }
+          .proposal-summary .summary-card:last-of-type { border-left: 1.5mm solid #087f8c !important; }
+          .proposal-summary .summary-card > p:first-of-type { color: #162345 !important; }
+          .proposal-summary p { margin-top: 1.5mm !important; font-size: 9px !important; line-height: 1.3 !important; }
+          .proposal-summary .text-4xl, .proposal-summary .sm\\:text-5xl { font-size: 27px !important; }
+          .proposal-summary .text-2xl, .proposal-summary .sm\\:text-3xl { font-size: 21px !important; }
           .summary-card { background: #fff !important; break-inside: avoid; page-break-inside: avoid; }
-          .proposal-content { display: grid !important; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; gap: 3mm !important; padding: 3mm 5mm !important; }
-          .proposal-content > .proposal-composition:only-child { grid-column: 1 / -1; }
-          .proposal-composition { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 2.5mm !important; }
-          .proposal-section-heading, .proposal-composition > .section-closing { grid-column: 1 / -1; }
-          .proposal-section-heading { gap: 2mm !important; padding-bottom: 1.5mm !important; }
-          .proposal-section-heading span { height: 7mm !important; }
-          .proposal-section-heading h2 { font-size: 14px !important; line-height: 1.15 !important; }
-          .proposal-section-heading p { margin-top: .5mm !important; font-size: 8px !important; }
-          .proposal-section { border-radius: 2mm !important; }
-          .proposal-section header { gap: 1.5mm !important; padding: 1.5mm 2mm !important; }
-          .proposal-section header span { height: 5mm !important; min-width: 5mm !important; font-size: 7px !important; }
-          .proposal-section header h3 { font-size: 8px !important; }
-          .proposal-section > div { padding-inline: 2mm !important; }
-          .financial-item { display: grid !important; grid-template-columns: minmax(0, 1fr) auto !important; gap: 2mm !important; padding-block: 1.5mm !important; }
-          .financial-item h4, .financial-item div { font-size: 8px !important; line-height: 1.2 !important; }
-          .financial-item p, .financial-item span { margin-top: .5mm !important; font-size: 7px !important; line-height: 1.2 !important; }
-          .plan-features { padding-block: 1.5mm !important; }
-          .plan-features p { margin-bottom: 1mm !important; font-size: 7px !important; }
+          .proposal-content { display: block !important; padding: 3mm 6mm 4mm !important; }
+          .proposal-composition { display: flex !important; flex-direction: column !important; }
+          .proposal-implementation { display: block !important; }
+          .proposal-plan { order: 1; }
+          .proposal-resources { order: 2; }
+          .proposal-composition > .section-closing { order: 3; }
+          .proposal-meta { order: 4; margin-bottom: 3mm !important; border-top-width: 1px !important; }
+          .proposal-section-heading { display: block !important; margin: 0 !important; padding: 1.5mm 3mm !important; border: 1px solid #98a2b3 !important; border-bottom: 0 !important; background: #162345 !important; }
+          .proposal-section-heading > span { display: none !important; }
+          .proposal-section-heading h2 { color: #fff !important; font-size: 12px !important; line-height: 1.2 !important; }
+          .proposal-section-heading p { margin-top: .7mm !important; color: #d0d5dd !important; font-size: 8px !important; }
+          .proposal-section { margin: 0 !important; border-width: 0 1px 1px !important; border-radius: 0 !important; }
+          .proposal-section + .proposal-section { border-top: 0 !important; }
+          .proposal-section header { gap: 2mm !important; padding: 1.2mm 3mm !important; border-top: 1px solid #98a2b3 !important; }
+          .proposal-section header span { height: 5mm !important; min-width: 5mm !important; border-radius: 1mm !important; font-size: 7px !important; }
+          .proposal-section header h3 { font-size: 9px !important; }
+          .proposal-section > div { padding-inline: 3mm !important; }
+          .financial-item { display: grid !important; grid-template-columns: minmax(0, 1fr) 48mm !important; gap: 4mm !important; padding-block: 1.2mm !important; overflow: visible !important; }
+          .financial-item > div:last-child { width: 48mm !important; overflow: visible !important; }
+          .financial-item > div:last-child span { color: #344054 !important; }
+          .financial-item h4, .financial-item div { font-size: 9px !important; line-height: 1.3 !important; }
+          .financial-item p, .financial-item span { margin-top: .5mm !important; font-size: 8px !important; line-height: 1.3 !important; }
+          .plan-features { padding-block: 1.2mm !important; }
+          .plan-features p { margin-bottom: 1.5mm !important; font-size: 8px !important; }
           .plan-features ul { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .5mm 2mm !important; }
-          .plan-features li { font-size: 7px !important; line-height: 1.2 !important; }
-          .plan-features svg { width: 9px !important; height: 9px !important; }
-          .section-closing { gap: 2mm !important; padding: 1.5mm 2mm !important; }
-          .section-closing strong, .section-closing h3 { font-size: 10px !important; }
-          .proposal-implementation { display: grid !important; gap: 2mm !important; }
-          .proposal-implementation .section-closing { padding-block: 1mm !important; }
-          .proposal-implementation .section-closing div { margin-top: 1mm !important; padding: 1.5mm 2mm !important; font-size: 7px !important; }
-          .proposal-section > div > p { padding-block: 1.5mm !important; font-size: 7px !important; line-height: 1.25 !important; }
+          .plan-features li { font-size: 8px !important; line-height: 1.3 !important; }
+          .plan-features svg { width: 10px !important; height: 10px !important; }
+          .section-closing { border-radius: 0 !important; gap: 2.5mm !important; padding: 1.5mm 3mm !important; }
+          .proposal-composition > .section-closing { margin: 0 0 3mm !important; background: #e0f2fe !important; border: 1px solid #38bdf8 !important; color: #075985 !important; }
+          .proposal-composition > .section-closing * { color: #075985 !important; }
+          .section-closing strong, .section-closing h3 { font-size: 12px !important; }
+          .proposal-implementation { margin-top: 0 !important; break-inside: avoid !important; page-break-inside: avoid !important; }
+          .proposal-implementation .section-closing { padding-block: 1.5mm !important; }
+          .proposal-implementation .section-closing div { margin-top: 1mm !important; padding: 1.5mm 3mm !important; border: 1px solid #a7f3d0 !important; border-radius: 0 !important; background: #ecfdf5 !important; color: #344054 !important; font-size: 8px !important; }
+          .proposal-implementation .section-closing div * { color: #344054 !important; }
+          .proposal-section > div > p { padding-block: 1.2mm !important; font-size: 8px !important; line-height: 1.25 !important; }
           .financial-item, .section-closing { break-inside: avoid; page-break-inside: avoid; }
           .proposal-section { break-inside: avoid; page-break-inside: avoid; }
-          .proposal-footer { padding: 1.5mm 5mm !important; font-size: 7px !important; }
-          @page { size: A4 landscape; margin: 7mm; }
+          .proposal-footer { position: fixed !important; right: 0 !important; bottom: 0 !important; left: 0 !important; padding: 1.5mm 6mm !important; background: #f2f4f7 !important; border-color: #d0d5dd !important; color: #667085 !important; font-size: 8px !important; }
+          @page { size: A4 portrait; margin: 6mm; }
         }`}
       </style>
 
@@ -291,7 +313,7 @@ export function ProposalPreviewPage() {
           <button
             type="button"
             onClick={() => window.print()}
-            className={`${actionClass} border-brand-500 bg-brand-500 font-semibold text-white hover:bg-brand-600 dark:border-brand-500 dark:bg-brand-500 dark:text-white`}
+            className={actionClass}
           >
             <Printer
               size={16}
@@ -304,9 +326,9 @@ export function ProposalPreviewPage() {
         <article className="proposal-card overflow-hidden rounded-2xl border border-gray-200 border-t-4 border-t-brand-500 bg-white shadow-xl shadow-brand-950/10 dark:border-gray-700 dark:border-t-brand-400 dark:bg-gray-900 dark:shadow-2xl dark:shadow-black/30">
           <header className="proposal-header flex flex-col gap-5 bg-white px-6 py-6 text-gray-900 dark:bg-gray-900 dark:text-white sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <img
-              src="/logo-infarma.png"
+              src="/favicon.svg"
               alt="Infarma Sistemas de Gestão"
-              className="h-12 w-36 object-contain object-left dark:brightness-0 dark:invert"
+              className="h-14 w-14 object-contain"
             />
             <div className="border-l-2 border-brand-500 pl-4 sm:border-l-0 sm:border-r-2 sm:pl-0 sm:pr-4 sm:text-right">
               <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-brand-600 dark:text-brand-400">
@@ -332,7 +354,7 @@ export function ProposalPreviewPage() {
             <div className="grid gap-7 sm:grid-cols-[1.3fr_1fr] sm:items-end sm:gap-0">
               <div className="summary-card min-w-0 sm:pr-8">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-300">
-                  Investimento mensal
+                  1 · Mensalidade Infarma
                 </p>
                 <p className="mt-3 break-words text-4xl font-bold tabular-nums tracking-tight text-white sm:text-5xl">
                   {formatCurrency(totals.infarmaRecurringTotal, currency)}
@@ -343,7 +365,7 @@ export function ProposalPreviewPage() {
               </div>
               <div className="summary-card min-w-0 border-t border-white/15 pt-6 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">
-                  Implantação
+                  2 · Implantação
                 </p>
                 {proposal.services.length ? (
                   <>
@@ -386,7 +408,8 @@ export function ProposalPreviewPage() {
               {selectedPlan && (
                 <Section
                   title="Plano Conexa"
-                  eyebrow="01"
+                  eyebrow="MENSAL"
+                  className="proposal-plan"
                 >
                   <FinancialItem
                     title={selectedPlan.name}
@@ -437,7 +460,8 @@ export function ProposalPreviewPage() {
               {templates.length > 0 && (
                 <Section
                   title="Custos da Meta"
-                  eyebrow={selectedPlan ? '02' : '01'}
+                  eyebrow="ESTIMATIVA"
+                  className="proposal-meta"
                 >
                   {templates.map((item) => (
                     <FinancialItem
@@ -463,9 +487,8 @@ export function ProposalPreviewPage() {
               {proposal.resources.length > 0 && (
                 <Section
                   title="Produtos adicionais"
-                  eyebrow={
-                    selectedPlan ? (templates.length ? '03' : '02') : templates.length ? '02' : '01'
-                  }
+                  eyebrow="MENSAL"
+                  className="proposal-resources"
                 >
                   {proposal.resources.map((item) => {
                     const gross = item.value * item.quantity;
