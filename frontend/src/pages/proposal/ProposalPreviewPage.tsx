@@ -19,8 +19,8 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="proposal-section overflow-hidden rounded-2xl bg-gray-50/80 ring-1 ring-gray-200 dark:bg-white/[0.025] dark:ring-gray-800">
-      <header className="flex items-center gap-3 border-b border-gray-200 bg-white px-5 py-4 dark:border-gray-800 dark:bg-gray-900 sm:px-6">
+    <section className="proposal-section overflow-hidden rounded-2xl bg-gray-50/80 ring-1 ring-gray-200 shadow-sm shadow-gray-200/40 dark:bg-gray-950/50 dark:ring-gray-700 dark:shadow-none">
+      <header className="flex items-center gap-3 border-b border-gray-200 bg-white/90 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/90 sm:px-6">
         <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-brand-50 px-2 text-[10px] font-bold tracking-wider text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">
           {eyebrow}
         </span>
@@ -174,25 +174,59 @@ export function ProposalPreviewPage() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-gray-50 text-gray-900 transition-colors dark:bg-gray-950 dark:text-white/90">
+    <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-brand-50/60 via-gray-50 to-gray-100 text-gray-900 transition-colors dark:from-gray-950 dark:via-[#111827] dark:to-gray-950 dark:text-white/90">
       <style>
         {`@media print {
-          html, body, .proposal-page { background: #fff !important; }
-          body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          html, body { width: 100%; height: 100%; background: #fff !important; }
+          body { margin: 0 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
           .proposal-actions { display: none !important; }
-          .proposal-page { max-width: none !important; padding: 0 !important; }
+          .proposal-page { width: 100% !important; max-width: none !important; padding: 0 !important; }
           .proposal-card, .proposal-section { background: #fff !important; color: #101828 !important; box-shadow: none !important; }
-          .proposal-card { border: 0 !important; }
+          .proposal-card { border: 0 !important; border-radius: 0 !important; }
           .proposal-section { border-color: #d0d5dd !important; }
           .proposal-section *, .proposal-summary * { border-color: #e4e7ec !important; color: #344054 !important; }
-          .proposal-header { background: #fff !important; border-bottom: 1px solid #d0d5dd !important; color: #101828 !important; }
+          .proposal-header { min-height: 0 !important; padding: 3mm 5mm !important; background: #fff !important; border-bottom: 1px solid #d0d5dd !important; color: #101828 !important; }
+          .proposal-header img { width: 28mm !important; height: 9mm !important; }
           .proposal-header img { filter: none !important; }
           .proposal-header * { color: #344054 !important; }
-          .proposal-summary { background: #f9fafb !important; }
+          .proposal-header h1 { margin-top: 0 !important; font-size: 16px !important; line-height: 1.1 !important; }
+          .proposal-summary { padding: 3mm 5mm !important; background: #f2f4f7 !important; }
+          .proposal-summary > div { gap: 4mm !important; }
+          .proposal-summary p { margin-top: 1mm !important; font-size: 8px !important; line-height: 1.25 !important; }
+          .proposal-summary .text-4xl, .proposal-summary .sm\\:text-5xl { font-size: 22px !important; }
+          .proposal-summary .text-2xl, .proposal-summary .sm\\:text-3xl { font-size: 16px !important; }
           .summary-card { background: #fff !important; break-inside: avoid; page-break-inside: avoid; }
+          .proposal-content { display: grid !important; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; gap: 3mm !important; padding: 3mm 5mm !important; }
+          .proposal-content > .proposal-composition:only-child { grid-column: 1 / -1; }
+          .proposal-composition { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 2.5mm !important; }
+          .proposal-section-heading, .proposal-composition > .section-closing { grid-column: 1 / -1; }
+          .proposal-section-heading { gap: 2mm !important; padding-bottom: 1.5mm !important; }
+          .proposal-section-heading span { height: 7mm !important; }
+          .proposal-section-heading h2 { font-size: 14px !important; line-height: 1.15 !important; }
+          .proposal-section-heading p { margin-top: .5mm !important; font-size: 8px !important; }
+          .proposal-section { border-radius: 2mm !important; }
+          .proposal-section header { gap: 1.5mm !important; padding: 1.5mm 2mm !important; }
+          .proposal-section header span { height: 5mm !important; min-width: 5mm !important; font-size: 7px !important; }
+          .proposal-section header h3 { font-size: 8px !important; }
+          .proposal-section > div { padding-inline: 2mm !important; }
+          .financial-item { display: grid !important; grid-template-columns: minmax(0, 1fr) auto !important; gap: 2mm !important; padding-block: 1.5mm !important; }
+          .financial-item h4, .financial-item div { font-size: 8px !important; line-height: 1.2 !important; }
+          .financial-item p, .financial-item span { margin-top: .5mm !important; font-size: 7px !important; line-height: 1.2 !important; }
+          .plan-features { padding-block: 1.5mm !important; }
+          .plan-features p { margin-bottom: 1mm !important; font-size: 7px !important; }
+          .plan-features ul { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .5mm 2mm !important; }
+          .plan-features li { font-size: 7px !important; line-height: 1.2 !important; }
+          .plan-features svg { width: 9px !important; height: 9px !important; }
+          .section-closing { gap: 2mm !important; padding: 1.5mm 2mm !important; }
+          .section-closing strong, .section-closing h3 { font-size: 10px !important; }
+          .proposal-implementation { display: grid !important; gap: 2mm !important; }
+          .proposal-implementation .section-closing { padding-block: 1mm !important; }
+          .proposal-implementation .section-closing div { margin-top: 1mm !important; padding: 1.5mm 2mm !important; font-size: 7px !important; }
+          .proposal-section > div > p { padding-block: 1.5mm !important; font-size: 7px !important; line-height: 1.25 !important; }
           .financial-item, .section-closing { break-inside: avoid; page-break-inside: avoid; }
-          .proposal-section { break-before: auto; }
-          @page { margin: 12mm; }
+          .proposal-section { break-inside: avoid; page-break-inside: avoid; }
+          .proposal-footer { padding: 1.5mm 5mm !important; font-size: 7px !important; }
+          @page { size: A4 landscape; margin: 7mm; }
         }`}
       </style>
 
@@ -267,7 +301,7 @@ export function ProposalPreviewPage() {
           </button>
         </nav>
 
-        <article className="proposal-card overflow-hidden rounded-2xl border border-gray-200 border-t-4 border-t-brand-500 bg-white shadow-xl shadow-gray-200/50 dark:border-gray-800 dark:border-t-brand-500 dark:bg-gray-900 dark:shadow-none">
+        <article className="proposal-card overflow-hidden rounded-2xl border border-gray-200 border-t-4 border-t-brand-500 bg-white shadow-xl shadow-brand-950/10 dark:border-gray-700 dark:border-t-brand-400 dark:bg-gray-900 dark:shadow-2xl dark:shadow-black/30">
           <header className="proposal-header flex flex-col gap-5 bg-white px-6 py-6 text-gray-900 dark:bg-gray-900 dark:text-white sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <img
               src="/logo-infarma.png"
@@ -329,12 +363,12 @@ export function ProposalPreviewPage() {
             </div>
           </section>
 
-          <div className="space-y-12 p-5 sm:p-8">
+          <div className="proposal-content space-y-12 p-5 sm:p-8">
             <section
               aria-labelledby="monthly-composition-title"
-              className="space-y-5"
+              className="proposal-composition space-y-5"
             >
-              <div className="flex items-start gap-4 border-b border-gray-200 pb-5 dark:border-gray-800">
+              <div className="proposal-section-heading flex items-start gap-4 border-b border-gray-200 pb-5 dark:border-gray-700">
                 <span className="mt-1 h-10 w-1 shrink-0 rounded-full bg-brand-500" />
                 <div>
                   <h2
@@ -376,7 +410,7 @@ export function ProposalPreviewPage() {
                     total={formatCurrency(totals.discountedPlan, currency)}
                   />
                   {selectedPlan.features.length > 0 && (
-                    <div className="py-4">
+                    <div className="plan-features py-4">
                       <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         Recursos incluídos
                       </p>
@@ -486,9 +520,9 @@ export function ProposalPreviewPage() {
             {proposal.services.length > 0 && (
               <section
                 aria-labelledby="implementation-title"
-                className="space-y-4"
+                className="proposal-implementation space-y-4"
               >
-                <div className="flex items-start gap-4 border-b border-gray-200 pb-5 dark:border-gray-800">
+                <div className="proposal-section-heading flex items-start gap-4 border-b border-gray-200 pb-5 dark:border-gray-700">
                   <span className="mt-1 h-10 w-1 shrink-0 rounded-full bg-[#087f8c]" />
                   <div>
                     <h2
@@ -553,7 +587,7 @@ export function ProposalPreviewPage() {
             )}
           </div>
 
-          <footer className="flex flex-col gap-1 border-t border-gray-200 bg-gray-50 px-7 py-5 text-center text-xs text-gray-400 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-500 sm:flex-row sm:justify-between sm:text-left">
+          <footer className="proposal-footer flex flex-col gap-1 border-t border-gray-200 bg-gray-50 px-7 py-5 text-center text-xs text-gray-500 dark:border-gray-700 dark:bg-gray-950/80 dark:text-gray-400 sm:flex-row sm:justify-between sm:text-left">
             <span>Proposta comercial gerada pela Infarma Sistemas de Gestão.</span>
             <span>Valores apresentados em {currency}.</span>
           </footer>
