@@ -225,16 +225,16 @@ export function SummaryPage() {
             )}
           </FinancialDetailGroup>
         </div>
-        <div className="grid md:grid-cols-2">
+        <div className="grid md:grid-cols-3">
           <div className="flex items-center justify-between gap-4 bg-brand-500 px-5 py-5 text-white">
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-white/70">
-                Total mensal
+                Mensalidade Infarma
               </p>
-              <p className="mt-1 text-sm text-white/80">Meta, plano e produtos</p>
+              <p className="mt-1 text-sm text-white/80">Plano e produtos adicionais</p>
             </div>
             <strong className="text-xl font-semibold sm:text-2xl">
-              {formatCurrency(totals.recurringTotal, store.currency)}
+              {formatCurrency(totals.infarmaRecurringTotal, store.currency)}
             </strong>
           </div>
           <div className="flex items-center justify-between gap-4 bg-[#087f8c] px-5 py-5 text-white">
@@ -252,6 +252,17 @@ export function SummaryPage() {
             </div>
             <strong className="text-xl font-semibold sm:text-2xl">
               {formatCurrency(totals.implementationTotal, store.currency)}
+            </strong>
+          </div>
+          <div className="flex items-center justify-between gap-4 bg-[#162345] px-5 py-5 text-white">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-white/70">
+                Estimativa Meta
+              </p>
+              <p className="mt-1 text-sm text-white/80">Baseada no volume informado</p>
+            </div>
+            <strong className="text-xl font-semibold sm:text-2xl">
+              {formatCurrency(totals.meta, store.currency)}
             </strong>
           </div>
         </div>

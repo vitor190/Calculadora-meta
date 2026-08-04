@@ -301,9 +301,11 @@ export function ProposalPreviewPage() {
                   Investimento mensal
                 </p>
                 <p className="mt-3 break-words text-4xl font-bold tabular-nums tracking-tight text-white sm:text-5xl">
-                  {formatCurrency(totals.recurringTotal, currency)}
+                  {formatCurrency(totals.infarmaRecurringTotal, currency)}
                 </p>
-                <p className="mt-3 text-xs text-white/60">Cobrança recorrente mensal</p>
+                <p className="mt-3 text-xs text-white/60">
+                  Mensalidade Infarma · estimativa da Meta apresentada separadamente
+                </p>
               </div>
               <div className="summary-card min-w-0 border-t border-white/15 pt-6 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">
@@ -414,9 +416,13 @@ export function ProposalPreviewPage() {
                     />
                   ))}
                   <GroupTotal
-                    label="Total Meta"
+                    label="Estimativa de custo da Meta"
                     value={formatCurrency(totals.meta, currency)}
                   />
+                  <p className="py-3 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                    Esta é uma estimativa baseada no volume informado. O valor não está incluso na
+                    mensalidade Infarma e pode variar conforme o uso e a tabela vigente da Meta.
+                  </p>
                 </Section>
               )}
 
@@ -469,10 +475,10 @@ export function ProposalPreviewPage() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">
                     Fechamento mensal
                   </p>
-                  <h3 className="mt-1 text-lg font-semibold">Total mensal</h3>
+                  <h3 className="mt-1 text-lg font-semibold">Mensalidade Infarma</h3>
                 </div>
                 <strong className="break-words text-3xl tabular-nums tracking-tight text-brand-700 dark:text-brand-400">
-                  {formatCurrency(totals.recurringTotal, currency)}
+                  {formatCurrency(totals.infarmaRecurringTotal, currency)}
                 </strong>
               </div>
             </section>

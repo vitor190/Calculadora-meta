@@ -86,6 +86,7 @@ export function calculateTotals(data: CalculatorData): CalculatorTotals {
   const resources = resourceGross - resourceDiscount;
   const recurringSubtotal = meta + data.planValue + resourceGross;
   const recurringDiscount = planDiscount + resourceDiscount;
+  const infarmaRecurringTotal = data.planValue + resourceGross - recurringDiscount;
   const recurringTotal = recurringSubtotal - recurringDiscount;
   const implementationTotal = services - serviceDiscount;
   const subtotal = recurringSubtotal + services;
@@ -101,6 +102,7 @@ export function calculateTotals(data: CalculatorData): CalculatorTotals {
     subtotal,
     recurringSubtotal,
     recurringDiscount,
+    infarmaRecurringTotal,
     recurringTotal,
     implementationTotal,
     planDiscount,

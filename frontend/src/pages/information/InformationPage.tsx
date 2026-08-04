@@ -191,6 +191,27 @@ export function InformationPage() {
             </div>
           </section>
 
+          <section className="rounded-xl border border-brand-200 bg-brand-50 p-4 dark:border-brand-500/30 dark:bg-brand-500/10">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
+                <Info
+                  size={20}
+                  aria-hidden="true"
+                />
+              </span>
+              <div>
+                <h2 className="text-base font-semibold text-gray-900 dark:text-white/90">
+                  O custo da Meta não está incluso no plano Infarma
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-300">
+                  A mensalidade do plano Infarma cobre somente os produtos e serviços contratados
+                  com a Infarma. As mensagens de template da API Oficial são cobradas separadamente
+                  pela Meta, conforme a categoria, a quantidade utilizada e a tabela vigente.
+                </p>
+              </div>
+            </div>
+          </section>
+
           <aside className="flex gap-2.5 text-xs text-gray-500 dark:text-gray-400">
             <Info
               size={16}

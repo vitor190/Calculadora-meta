@@ -68,6 +68,7 @@ export interface CalculatorTotals {
   subtotal: number;
   recurringSubtotal: number;
   recurringDiscount: number;
+  infarmaRecurringTotal: number;
   recurringTotal: number;
   implementationTotal: number;
   planDiscount: number;
