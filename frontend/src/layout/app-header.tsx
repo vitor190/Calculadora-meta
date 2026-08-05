@@ -24,7 +24,7 @@ export function AppHeader() {
           />
           <div className="hidden min-w-0 lg:block">
             <p className="truncate text-sm font-semibold text-gray-800 dark:text-white/90">
-              Calculadora Conexa
+              Calculadora Meta
             </p>
             <p className="truncate text-xs text-gray-400">Infarma Sistemas</p>
           </div>

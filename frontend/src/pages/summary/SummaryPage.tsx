@@ -46,7 +46,7 @@ export function SummaryPage() {
             Atualizado em tempo real
           </span>
         </div>
-        <div className="grid min-w-0 items-start gap-4 p-5 lg:grid-cols-2">
+        <div className="grid min-w-0 items-start gap-4 p-5 lg:grid-cols-1">
           <FinancialDetailGroup
             label="Estimativa Meta"
             total={formatCurrency(totals.meta, store.currency)}

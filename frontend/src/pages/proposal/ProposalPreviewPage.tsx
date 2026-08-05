@@ -26,7 +26,7 @@ function Section({
     <section
       className={`proposal-section overflow-hidden rounded-2xl bg-gray-50/80 ring-1 ring-gray-200 shadow-sm shadow-gray-200/40 dark:bg-gray-950/50 dark:ring-gray-700 dark:shadow-none ${className}`}
     >
-      <header className="flex items-center gap-3 border-b border-gray-200 bg-white/90 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/90 sm:px-6">
+      <header className="proposal-category-heading flex items-center gap-3 border-b border-gray-200 bg-white/90 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/90 sm:px-6">
         <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-brand-50 px-2 text-[10px] font-bold tracking-wider text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">
           {eyebrow}
         </span>
@@ -34,7 +34,9 @@ function Section({
           {title}
         </h3>
       </header>
-      <div className="divide-y divide-gray-100 px-5 dark:divide-gray-800 sm:px-6">{children}</div>
+      <div className="proposal-category-content divide-y divide-gray-100 px-5 dark:divide-gray-800 sm:px-6">
+        {children}
+      </div>
     </section>
   );
 }
@@ -107,7 +109,7 @@ function GroupTotal({
 }) {
   return (
     <div
-      className={`section-closing flex items-center justify-between gap-5 py-4 ${
+      className={`category-total section-closing flex items-center justify-between gap-5 py-4 ${
         prominent ? 'text-brand-700 dark:text-brand-400' : 'text-gray-900 dark:text-white/90'
       }`}
     >
@@ -163,7 +165,7 @@ export function ProposalPreviewPage() {
           .proposal-currency-note { display: none !important; }
           .proposal-page { width: 100% !important; max-width: none !important; padding: 0 !important; }
           .proposal-card, .proposal-section { background: #fff !important; color: #101828 !important; box-shadow: none !important; }
-          .proposal-card { width: 100% !important; padding-bottom: 7mm !important; border: 0 !important; border-radius: 0 !important; }
+          .proposal-card { width: 100% !important; padding-bottom: 10mm !important; border: 0 !important; border-radius: 0 !important; }
           .proposal-section { border: 1px solid #d0d5dd !important; background: #fff !important; }
           .proposal-section *, .proposal-summary * { border-color: #e4e7ec !important; color: #344054 !important; }
           .proposal-section > header { background: #eef2f6 !important; border-color: #cfd6df !important; }
@@ -193,17 +195,19 @@ export function ProposalPreviewPage() {
           .proposal-composition > .section-closing { order: 3; }
           .proposal-meta { order: 4; margin-bottom: 3mm !important; border-top-width: 1px !important; }
           .proposal-section-heading { display: block !important; margin: 0 !important; padding: 1.5mm 3mm !important; border: 1px solid #98a2b3 !important; border-bottom: 0 !important; background: #162345 !important; }
+          .proposal-section-heading { break-inside: avoid-page !important; page-break-inside: avoid !important; }
           .proposal-section-heading > span { display: none !important; }
           .proposal-section-heading h2 { color: #fff !important; font-size: 12px !important; line-height: 1.2 !important; }
           .proposal-section-heading p { margin-top: .7mm !important; color: #d0d5dd !important; font-size: 8px !important; }
-          .proposal-section { margin: 0 !important; border-width: 0 1px 1px !important; border-radius: 0 !important; }
+          .proposal-section { margin: 0 !important; overflow: visible !important; border-width: 0 1px 1px !important; border-radius: 0 !important; break-inside: auto !important; page-break-inside: auto !important; }
           .proposal-section + .proposal-section { border-top: 0 !important; }
           .proposal-section header { gap: 2mm !important; padding: 1.2mm 3mm !important; border-top: 1px solid #98a2b3 !important; }
+          .proposal-category-heading { break-after: avoid-page !important; page-break-after: avoid !important; }
           .proposal-section header span { height: 5mm !important; min-width: 5mm !important; border-radius: 1mm !important; font-size: 7px !important; }
           .proposal-section header h3 { font-size: 9px !important; }
           .proposal-section > div { padding-inline: 3mm !important; }
-          .financial-item { display: grid !important; grid-template-columns: minmax(0, 1fr) 48mm !important; gap: 4mm !important; padding-block: 1.2mm !important; overflow: visible !important; }
-          .financial-item > div:last-child { width: 48mm !important; overflow: visible !important; }
+          .financial-item { display: grid !important; grid-template-columns: minmax(0, 1fr) 56mm 8mm !important; gap: 4mm !important; padding-block: 1.2mm !important; overflow: visible !important; }
+          .financial-item > div:last-child { grid-column: 2 !important; width: 56mm !important; overflow: visible !important; }
           .financial-item > div:last-child span { color: #344054 !important; }
           .financial-item h4, .financial-item div { font-size: 9px !important; line-height: 1.3 !important; }
           .financial-item p, .financial-item span { margin-top: .5mm !important; font-size: 8px !important; line-height: 1.3 !important; }
@@ -211,20 +215,24 @@ export function ProposalPreviewPage() {
           .plan-features p { margin-bottom: 1.5mm !important; font-size: 8px !important; }
           .plan-features ul { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .5mm 2mm !important; }
           .plan-features li { font-size: 8px !important; line-height: 1.3 !important; }
+          .plan-features li { break-inside: avoid-page !important; page-break-inside: avoid !important; }
           .plan-features svg { width: 10px !important; height: 10px !important; }
           .section-closing { border-radius: 0 !important; gap: 2.5mm !important; padding: 1.5mm 3mm !important; }
           .proposal-composition > .section-closing { margin: 0 0 3mm !important; background: #e0f2fe !important; border: 1px solid #38bdf8 !important; color: #075985 !important; }
           .proposal-composition > .section-closing * { color: #075985 !important; }
           .section-closing strong, .section-closing h3 { font-size: 12px !important; }
-          .proposal-implementation { margin-top: 0 !important; break-inside: avoid !important; page-break-inside: avoid !important; }
+          .proposal-implementation { margin-top: 0 !important; break-inside: auto !important; page-break-inside: auto !important; }
+          .proposal-implementation > .proposal-section-heading { display: none !important; }
+          .proposal-implementation > .proposal-section { border-top-width: 1px !important; }
           .proposal-implementation .section-closing { padding-block: 1.5mm !important; }
           .proposal-implementation .section-closing div { margin-top: 1mm !important; padding: 1.5mm 3mm !important; border: 1px solid #a7f3d0 !important; border-radius: 0 !important; background: #ecfdf5 !important; color: #344054 !important; font-size: 8px !important; }
           .proposal-implementation .section-closing div * { color: #344054 !important; }
           .proposal-section > div > p { padding-block: 1.2mm !important; font-size: 8px !important; line-height: 1.25 !important; }
-          .financial-item, .section-closing { break-inside: avoid; page-break-inside: avoid; }
-          .proposal-section { break-inside: avoid; page-break-inside: avoid; }
+          .financial-item, .section-closing, .category-total, .category-note, .payment-condition { break-inside: avoid-page !important; page-break-inside: avoid !important; }
+          .category-total, .category-note { break-before: avoid-page !important; page-break-before: avoid !important; }
+          .proposal-section-heading { break-after: avoid-page !important; page-break-after: avoid !important; }
           .proposal-footer { position: fixed !important; right: 0 !important; bottom: 0 !important; left: 0 !important; padding: 1.5mm 6mm !important; background: #f2f4f7 !important; border-color: #d0d5dd !important; color: #667085 !important; font-size: 8px !important; }
-          @page { size: A4 portrait; margin: 6mm; }
+          @page { size: A4 portrait; margin: 6mm 6mm 12mm; }
         }`}
       </style>
 
@@ -418,7 +426,7 @@ export function ProposalPreviewPage() {
                     label="Estimativa Meta"
                     value={formatCurrency(totals.meta, currency)}
                   />
-                  <p className="py-3 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                  <p className="category-note py-3 text-xs leading-5 text-gray-500 dark:text-gray-400">
                     Esta é uma estimativa baseada no volume informado. O valor não está incluso na
                     mensalidade Infarma e pode variar conforme o uso e a tabela vigente da Meta.
                   </p>
@@ -539,7 +547,7 @@ export function ProposalPreviewPage() {
                       value={formatCurrency(totals.implementationTotal, currency)}
                       prominent
                     />
-                    <div className="mt-1 flex flex-col gap-1 rounded-lg bg-gray-50 px-4 py-3 text-sm text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="payment-condition mt-1 flex flex-col gap-1 rounded-lg bg-gray-50 px-4 py-3 text-sm text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
                       <span>Condição de pagamento</span>
                       <strong className="tabular-nums text-gray-900 dark:text-white/90">
                         {paymentCondition}
