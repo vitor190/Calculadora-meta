@@ -1,9 +1,9 @@
-import { useMemo, useState, type ReactNode } from 'react';
-import { Check, Copy, Moon, Printer, Share2, Sun } from 'lucide-react';
+import { useMemo, type ReactNode } from 'react';
+import { Check, Moon, Printer, Sun } from 'lucide-react';
 import { ThemeBrandIcon } from '../../components/theme-brand-icon';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
-import { createProposalUrl, readProposalSnapshot } from '../../services/proposal.service';
+import { readProposalSnapshot } from '../../services/proposal.service';
 import { calculateDiscount, calculateTotals } from '../../services/calculator.service';
 import { selectCalculatorData, useCalculator } from '../../store/calculator.store';
 import { useTheme } from '../../store/theme.store';
@@ -122,7 +122,6 @@ export function ProposalPreviewPage() {
   const sharedProposal = useMemo(() => readProposalSnapshot(), []);
   const calculatorState = useCalculator();
   const proposal = hasSharedData ? sharedProposal : selectCalculatorData(calculatorState);
-  const [actionMessage, setActionMessage] = useState('');
   const { theme, toggleTheme } = useTheme();
 
   if (!proposal)
@@ -152,35 +151,6 @@ export function ProposalPreviewPage() {
     installments > 1
       ? `${installments} parcelas de ${formatCurrency(totals.implementationTotal / installments, currency)}`
       : 'Pagamento único';
-
-  const copyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(createProposalUrl(proposal));
-      setActionMessage('Link copiado');
-    } catch {
-      setActionMessage('Não foi possível copiar o link');
-    }
-    window.setTimeout(() => setActionMessage(''), 2000);
-  };
-
-  const share = async () => {
-    if (!navigator.share) {
-      await copyLink();
-      return;
-    }
-
-    try {
-      const shareUrl = createProposalUrl(proposal);
-      await navigator.share({
-        title: 'Proposta Comercial Conexa',
-        text: 'Confira a proposta comercial Conexa.',
-        url: shareUrl,
-      });
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') return;
-      await copyLink();
-    }
-  };
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-brand-50/60 via-gray-50 to-gray-100 text-gray-900 transition-colors dark:from-gray-950 dark:via-[#111827] dark:to-gray-950 dark:text-white/90">
@@ -263,12 +233,6 @@ export function ProposalPreviewPage() {
           aria-label="Ações da proposta"
           className="proposal-actions mb-4 flex flex-wrap items-center justify-end gap-2"
         >
-          <p
-            aria-live="polite"
-            className="mr-auto min-h-5 text-xs text-gray-500 dark:text-gray-400"
-          >
-            {actionMessage}
-          </p>
           <button
             type="button"
             onClick={toggleTheme}
@@ -286,35 +250,6 @@ export function ProposalPreviewPage() {
                 aria-hidden="true"
               />
             )}
-          </button>
-          <button
-            type="button"
-            onClick={copyLink}
-            className={actionClass}
-          >
-            {actionMessage === 'Link copiado' ? (
-              <Check
-                size={16}
-                aria-hidden="true"
-              />
-            ) : (
-              <Copy
-                size={16}
-                aria-hidden="true"
-              />
-            )}
-            {actionMessage === 'Link copiado' ? 'Link copiado' : 'Copiar link'}
-          </button>
-          <button
-            type="button"
-            onClick={share}
-            className={actionClass}
-          >
-            <Share2
-              size={16}
-              aria-hidden="true"
-            />
-            Compartilhar
           </button>
           <button
             type="button"
