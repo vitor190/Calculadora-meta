@@ -185,6 +185,7 @@ export function ProposalPreviewPage() {
           body { margin: 0 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
           main { min-height: 0 !important; background: #fff !important; background-image: none !important; color: #101828 !important; }
           .proposal-actions { display: none !important; }
+          .proposal-currency-note { display: none !important; }
           .proposal-page { width: 100% !important; max-width: none !important; padding: 0 !important; }
           .proposal-card, .proposal-section { background: #fff !important; color: #101828 !important; box-shadow: none !important; }
           .proposal-card { width: 100% !important; padding-bottom: 7mm !important; border: 0 !important; border-radius: 0 !important; }
@@ -612,7 +613,7 @@ export function ProposalPreviewPage() {
 
           <footer className="proposal-footer flex flex-col gap-1 border-t border-gray-200 bg-gray-50 px-7 py-5 text-center text-xs text-gray-500 dark:border-gray-700 dark:bg-gray-950/80 dark:text-gray-400 sm:flex-row sm:justify-between sm:text-left">
             <span>Proposta comercial gerada pela Infarma Sistemas de Gestão.</span>
-            <span>Valores apresentados em {currency}.</span>
+            <span className="proposal-currency-note">Valores apresentados em {currency}.</span>
           </footer>
         </article>
       </div>
