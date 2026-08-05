@@ -40,6 +40,7 @@ export interface CalculatorData {
 }
 
 export interface CalculatorActions {
+  resetCalculator: () => void;
   setCurrency: (currency: CurrencyCode) => void;
   updateTemplate: (template: TemplateCost) => void;
   selectPlan: (id: string) => void;

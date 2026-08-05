@@ -3,8 +3,9 @@ import { Check, Copy, Moon, Printer, Share2, Sun } from 'lucide-react';
 import { ThemeBrandIcon } from '../../components/theme-brand-icon';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
-import { readProposalSnapshot } from '../../services/proposal.service';
+import { createProposalUrl, readProposalSnapshot } from '../../services/proposal.service';
 import { calculateDiscount, calculateTotals } from '../../services/calculator.service';
+import { selectCalculatorData, useCalculator } from '../../store/calculator.store';
 import { useTheme } from '../../store/theme.store';
 
 const actionClass =
@@ -117,7 +118,10 @@ function GroupTotal({
 }
 
 export function ProposalPreviewPage() {
-  const proposal = useMemo(() => readProposalSnapshot(), []);
+  const hasSharedData = useMemo(() => new URLSearchParams(window.location.search).has('dados'), []);
+  const sharedProposal = useMemo(() => readProposalSnapshot(), []);
+  const calculatorState = useCalculator();
+  const proposal = hasSharedData ? sharedProposal : selectCalculatorData(calculatorState);
   const [actionMessage, setActionMessage] = useState('');
   const { theme, toggleTheme } = useTheme();
 
@@ -151,7 +155,7 @@ export function ProposalPreviewPage() {
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(createProposalUrl(proposal));
       setActionMessage('Link copiado');
     } catch {
       setActionMessage('Não foi possível copiar o link');
@@ -166,10 +170,11 @@ export function ProposalPreviewPage() {
     }
 
     try {
+      const shareUrl = createProposalUrl(proposal);
       await navigator.share({
         title: 'Proposta Comercial Conexa',
         text: 'Confira a proposta comercial Conexa.',
-        url: window.location.href,
+        url: shareUrl,
       });
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return;

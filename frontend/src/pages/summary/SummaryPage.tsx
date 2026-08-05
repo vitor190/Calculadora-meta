@@ -7,7 +7,6 @@ import {
 } from '../../components/financial-detail';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
-import { createProposalUrl } from '../../services/proposal.service';
 import { calculateDiscount, calculateTotals } from '../../services/calculator.service';
 import { useCalculator } from '../../store/calculator.store';
 
@@ -18,7 +17,7 @@ export function SummaryPage() {
   const addedResources = store.resources;
   const usedTemplates = store.templates.filter((template) => template.quantity > 0);
   const openProposal = () => {
-    window.open(createProposalUrl(store), '_blank', 'noopener,noreferrer');
+    window.open('/proposta', '_blank', 'noopener,noreferrer');
   };
   return (
     <CalculatorShell

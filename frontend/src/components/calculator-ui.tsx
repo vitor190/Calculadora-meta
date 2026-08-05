@@ -1,9 +1,10 @@
 ﻿import { useState, type KeyboardEvent, type ReactNode, type SelectHTMLAttributes } from 'react';
-import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
 import { ui } from '../lib/ui';
 import { convertFromBrl, convertToBrl, getCurrencySymbol } from '../lib/currency';
-import { useCalculator } from '../store/calculator.store';
+import { selectCalculatorData, useCalculator } from '../store/calculator.store';
+import { createInitialCalculatorData } from '../services/calculator.service';
 import { calculatorSteps } from '../lib/calculator-steps';
 
 export const numberValue = (value: string) => Math.max(0, Number(value) || 0);
@@ -260,17 +261,45 @@ export function CalculatorShell({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const calculatorState = useCalculator();
+  const calculatorData = selectCalculatorData(calculatorState);
+  const { resetCalculator } = calculatorState;
   const index = Math.max(
     0,
     calculatorSteps.findIndex((step) => step.path === location.pathname),
   );
   return (
     <div className="mx-auto w-full min-w-0 max-w-7xl">
-      <div className="mb-6">
-        <h2 className={ui.pageTitle}>Calculadora de custos WhatsApp</h2>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Simule uma proposta comercial completa com atualização instantânea.
-        </p>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className={ui.pageTitle}>Calculadora de custos WhatsApp</h2>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Simule uma proposta comercial completa com atualização instantânea.
+          </p>
+        </div>
+        <button
+          type="button"
+          className={`${ui.secondaryButton} min-h-10 self-start whitespace-nowrap`}
+          onClick={() => {
+            const hasChanges =
+              JSON.stringify(calculatorData) !== JSON.stringify(createInitialCalculatorData());
+            if (
+              hasChanges &&
+              !window.confirm(
+                'Iniciar uma nova simulação? Todos os dados da simulação atual serão descartados.',
+              )
+            )
+              return;
+            resetCalculator();
+            navigate('/calculadora/informacoes');
+          }}
+        >
+          <RotateCcw
+            size={16}
+            aria-hidden="true"
+          />
+          Nova simulação
+        </button>
       </div>
       {children}
       <div className="mt-6 grid grid-cols-2 items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
