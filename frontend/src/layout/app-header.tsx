@@ -1,16 +1,15 @@
-﻿import { ChevronDown, History, Menu, Moon, Sun, X } from 'lucide-react';
+import { ChevronDown, History, Moon, Sun } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router';
+import { ThemeBrandIcon } from '../components/theme-brand-icon';
 import { VersionHistoryModal } from '../components/version-history-modal';
-import { useSidebar } from '../store/sidebar.store';
 import { useTheme } from '../store/theme.store';
 
 export function AppHeader() {
-  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const { theme, toggleTheme } = useTheme();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const handleToggle = () => (window.innerWidth >= 1024 ? toggleSidebar() : toggleMobileSidebar());
 
   useEffect(() => {
     const closeMenu = (event: MouseEvent) => {
@@ -23,15 +22,24 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-9999 flex w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-      <div className="flex grow items-center justify-between px-4 py-3 lg:px-6">
-        <button
-          onClick={handleToggle}
-          aria-label="Alternar menu lateral"
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800"
+      <div className="mx-auto flex w-full max-w-400 items-center justify-between gap-4 px-4 py-3 sm:px-5 lg:px-6">
+        <Link
+          to="/calculadora/informacoes"
+          className="flex min-w-0 items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+          aria-label="Calculadora Conexa — início"
         >
-          {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-        <div className="flex items-center gap-3">
+          <ThemeBrandIcon
+            alt=""
+            className="h-9 w-9 shrink-0"
+          />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-gray-800 dark:text-white/90">
+              Calculadora Conexa
+            </p>
+            <p className="truncate text-xs text-gray-400">Infarma Sistemas</p>
+          </div>
+        </Link>
+        <div className="flex shrink-0 items-center gap-3">
           <button
             onClick={toggleTheme}
             aria-label="Alternar tema"

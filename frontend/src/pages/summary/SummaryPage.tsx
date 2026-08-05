@@ -47,7 +47,7 @@ export function SummaryPage() {
             Atualizado em tempo real
           </span>
         </div>
-        <div className="grid items-start gap-4 p-5">
+        <div className="grid min-w-0 items-start gap-4 p-5 lg:grid-cols-2">
           <FinancialDetailGroup
             label="Custos da Meta"
             total={formatCurrency(totals.meta, store.currency)}
@@ -102,7 +102,7 @@ export function SummaryPage() {
                   valueLabel="Mensalidade líquida"
                 />
                 <div className="mt-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
-                  <div className="grid grid-cols-[1fr_auto] gap-4 bg-gray-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:bg-white/[0.03]">
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 bg-gray-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:bg-white/[0.03]">
                     <span>Recurso</span>
                     <span>Situação</span>
                   </div>
@@ -110,7 +110,7 @@ export function SummaryPage() {
                     {selectedPlan.features.map((feature) => (
                       <div
                         key={feature}
-                        className="grid grid-cols-[1fr_auto] items-center gap-4 bg-white px-3 py-2.5 text-xs dark:bg-gray-900"
+                        className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 bg-white px-3 py-2.5 text-xs dark:bg-gray-900"
                       >
                         <span className="text-gray-600 dark:text-gray-300">{feature}</span>
                         <span className="rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-semibold text-success-700 dark:bg-success-500/10 dark:text-success-400">

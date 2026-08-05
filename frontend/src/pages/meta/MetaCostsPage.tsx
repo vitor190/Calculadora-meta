@@ -86,7 +86,7 @@ export function MetaCostsPage() {
             aria-label="Categorias de templates da Meta"
           >
             <div className="grid gap-3 md:block md:divide-y md:divide-gray-100 md:overflow-hidden md:rounded-xl md:border md:border-gray-200 dark:md:divide-gray-800 dark:md:border-gray-800">
-              <div className="hidden grid-cols-[1.2fr_1fr_.7fr_1fr] gap-3 bg-gray-50 px-4 py-3 text-xs font-medium uppercase text-gray-400 dark:bg-white/[0.02] md:grid">
+              <div className="hidden grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(7rem,.7fr)_minmax(0,1fr)] gap-3 bg-gray-50 px-4 py-3 text-xs font-medium uppercase text-gray-400 dark:bg-white/[0.02] md:grid">
                 <span>Categoria</span>
                 <span>Valor por template</span>
                 <span>Quantidade</span>
@@ -95,7 +95,7 @@ export function MetaCostsPage() {
               {store.templates.map((item) => (
                 <div
                   key={item.id}
-                  className="grid gap-3 rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50/70 dark:border-gray-800 dark:bg-white/[0.02] dark:hover:bg-white/[0.04] md:grid-cols-[1.2fr_1fr_.7fr_1fr] md:items-center md:rounded-none md:border-0 md:bg-transparent"
+                  className="grid min-w-0 gap-3 rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50/70 dark:border-gray-800 dark:bg-white/[0.02] dark:hover:bg-white/[0.04] md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(7rem,.7fr)_minmax(0,1fr)] md:items-center md:rounded-none md:border-0 md:bg-transparent"
                 >
                   <div>
                     <span className="mb-1 block text-[11px] font-medium uppercase text-gray-400 md:hidden">

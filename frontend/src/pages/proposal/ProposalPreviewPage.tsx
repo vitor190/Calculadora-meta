@@ -1,5 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Check, Copy, Moon, Printer, Share2, Sun } from 'lucide-react';
+import { ThemeBrandIcon } from '../../components/theme-brand-icon';
 import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
 import { readProposalSnapshot } from '../../services/proposal.service';
@@ -124,10 +125,9 @@ export function ProposalPreviewPage() {
     return (
       <main className="grid min-h-screen place-items-center bg-gray-50 p-6 dark:bg-gray-950">
         <div className="max-w-md rounded-xl border border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
-          <img
-            src="/logo-infarma.png"
+          <ThemeBrandIcon
             alt="Infarma"
-            className="mx-auto h-16 w-auto dark:brightness-0 dark:invert"
+            className="mx-auto h-16 w-16 object-contain"
           />
           <h1 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white/90">
             Proposta não encontrada
@@ -325,10 +325,10 @@ export function ProposalPreviewPage() {
 
         <article className="proposal-card overflow-hidden rounded-2xl border border-gray-200 border-t-4 border-t-brand-500 bg-white shadow-xl shadow-brand-950/10 dark:border-gray-700 dark:border-t-brand-400 dark:bg-gray-900 dark:shadow-2xl dark:shadow-black/30">
           <header className="proposal-header flex flex-col gap-5 bg-white px-6 py-6 text-gray-900 dark:bg-gray-900 dark:text-white sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <img
-              src="/favicon.svg"
+            <ThemeBrandIcon
               alt="Infarma Sistemas de Gestão"
               className="h-14 w-14 object-contain"
+              lightOnPrint
             />
             <div className="border-l-2 border-brand-500 pl-4 sm:border-l-0 sm:border-r-2 sm:pl-0 sm:pr-4 sm:text-right">
               <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-brand-600 dark:text-brand-400">

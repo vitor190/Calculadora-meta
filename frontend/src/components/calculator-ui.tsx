@@ -267,7 +267,7 @@ export function CalculatorShell({
   const navigate = useNavigate();
   const index = Math.max(0, calculatorSteps.indexOf(location.pathname));
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto w-full min-w-0 max-w-7xl">
       <div className="mb-6">
         <h2 className={ui.pageTitle}>Calculadora de custos WhatsApp</h2>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -275,8 +275,8 @@ export function CalculatorShell({
         </p>
       </div>
       {children}
-      <div className="mt-6 grid grid-cols-3 items-center">
-        <div>
+      <div className="mt-6 grid grid-cols-2 items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
+        <div className="order-2 sm:order-1">
           {index > 0 && (
             <button
               onClick={() => navigate(calculatorSteps[index - 1])}
@@ -287,15 +287,15 @@ export function CalculatorShell({
             </button>
           )}
         </div>
-        <span className="justify-self-center text-xs text-gray-400">
+        <span className="order-1 col-span-2 justify-self-center text-xs text-gray-400 sm:order-2 sm:col-span-1">
           Etapa {index + 1} de {calculatorSteps.length}
         </span>
         {index === calculatorSteps.length - 1 ? (
-          <div className="justify-self-end">{finalAction}</div>
+          <div className="order-3 min-w-0 justify-self-end">{finalAction}</div>
         ) : (
           <button
             onClick={() => navigate(calculatorSteps[index + 1])}
-            className={`${ui.createButton} h-10 justify-self-end`}
+            className={`${ui.createButton} order-3 h-10 justify-self-end`}
           >
             Próximo
             <ArrowRight size={16} />

@@ -119,12 +119,12 @@ function SectionHeader({
   action: React.ReactNode;
 }) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-4">
-      <div>
+    <div className="mb-4 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
+      <div className="min-w-0">
         <h3 className="font-semibold text-gray-900 dark:text-white/90">{title}</h3>
         <p className="mt-1 text-xs text-gray-400">{description}</p>
       </div>
-      {action}
+      <div className="flex shrink-0 [&>button]:w-full sm:[&>button]:w-auto">{action}</div>
     </div>
   );
 }
@@ -143,7 +143,7 @@ function ProductCard({
   const name = item.name || 'produto';
   return (
     <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02]">
-      <div className="grid items-center gap-3 sm:grid-cols-[1fr_1fr_140px_36px]">
+      <div className="grid min-w-0 items-center gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_140px_36px]">
         <input
           className={ui.input}
           aria-label="Nome do produto"
@@ -215,7 +215,7 @@ function ImplementationCard({
   const discount = calculateDiscount(item.value, item.discountType, item.discountValue);
   return (
     <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.02]">
-      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_36px]">
+      <div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_36px]">
         <input
           className={ui.input}
           aria-label="Nome da implantação"
@@ -275,7 +275,7 @@ export function ProductsPage() {
           description="Escolha o plano e configure produtos, implantação e descontos em uma única tela."
         />
         <nav
-          className="sticky top-[72px] z-10 flex gap-2 overflow-x-auto border-b border-gray-100 bg-white/95 px-5 py-3 backdrop-blur dark:border-gray-800 dark:bg-gray-900/95 md:px-6"
+          className="sticky top-[65px] z-10 flex flex-wrap gap-2 border-b border-gray-100 bg-white/95 px-5 py-3 backdrop-blur dark:border-gray-800 dark:bg-gray-900/95 md:px-6"
           aria-label="Seções da proposta"
         >
           {sectionLinks.map(({ href, label, icon: Icon }) => (
