@@ -4,13 +4,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { ui } from '../lib/ui';
 import { convertFromBrl, convertToBrl, getCurrencySymbol } from '../lib/currency';
 import { useCalculator } from '../store/calculator.store';
+import { calculatorSteps } from '../lib/calculator-steps';
 
-export const calculatorSteps = [
-  '/calculadora/informacoes',
-  '/calculadora/meta',
-  '/calculadora/produtos',
-  '/calculadora/resumo',
-];
 export const numberValue = (value: string) => Math.max(0, Number(value) || 0);
 export const preventInvalidNumberKeys = (
   event: KeyboardEvent<HTMLInputElement>,
@@ -265,7 +260,10 @@ export function CalculatorShell({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const index = Math.max(0, calculatorSteps.indexOf(location.pathname));
+  const index = Math.max(
+    0,
+    calculatorSteps.findIndex((step) => step.path === location.pathname),
+  );
   return (
     <div className="mx-auto w-full min-w-0 max-w-7xl">
       <div className="mb-6">
@@ -279,7 +277,7 @@ export function CalculatorShell({
         <div className="order-2 sm:order-1">
           {index > 0 && (
             <button
-              onClick={() => navigate(calculatorSteps[index - 1])}
+              onClick={() => navigate(calculatorSteps[index - 1].path)}
               className={`${ui.secondaryButton} h-10`}
             >
               <ArrowLeft size={16} />
@@ -294,7 +292,7 @@ export function CalculatorShell({
           <div className="order-3 min-w-0 justify-self-end">{finalAction}</div>
         ) : (
           <button
-            onClick={() => navigate(calculatorSteps[index + 1])}
+            onClick={() => navigate(calculatorSteps[index + 1].path)}
             className={`${ui.createButton} order-3 h-10 justify-self-end`}
           >
             Próximo
