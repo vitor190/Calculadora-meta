@@ -201,7 +201,7 @@ export function InformationPage() {
               </span>
               <div>
                 <h2 className="text-base font-semibold text-gray-900 dark:text-white/90">
-                  O custo da Meta não está incluso no plano Infarma
+                  A estimativa Meta não está inclusa no plano Infarma
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-300">
                   A mensalidade do plano Infarma cobre somente os produtos e serviços contratados

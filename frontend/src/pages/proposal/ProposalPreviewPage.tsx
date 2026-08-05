@@ -400,7 +400,7 @@ export function ProposalPreviewPage() {
 
               {templates.length > 0 && (
                 <Section
-                  title="Custos da Meta"
+                  title="Estimativa Meta"
                   eyebrow="ESTIMATIVA"
                   className="proposal-meta"
                 >
@@ -415,7 +415,7 @@ export function ProposalPreviewPage() {
                     />
                   ))}
                   <GroupTotal
-                    label="Estimativa de custo da Meta"
+                    label="Estimativa Meta"
                     value={formatCurrency(totals.meta, currency)}
                   />
                   <p className="py-3 text-xs leading-5 text-gray-500 dark:text-gray-400">

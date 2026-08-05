@@ -23,7 +23,7 @@ export function MetaCostsPage() {
     <CalculatorShell>
       <CalculatorCard>
         <PageHeading
-          title="Custos da Meta"
+          title="Estimativa Meta"
           description="Tarifas oficiais da Meta para o Brasil em Real brasileiro (BRL)."
         />
         <div className="p-5 md:p-6">

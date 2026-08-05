@@ -54,6 +54,7 @@ function PlanCard({
     <button
       type="button"
       onClick={onSelect}
+      aria-pressed={selected}
       className={`relative flex h-full flex-col rounded-xl border p-5 text-left transition-all duration-200 ${cardClass}`}
     >
       {plan.featured && (
@@ -309,7 +310,7 @@ export function ProductsPage() {
                   plan={plan}
                   selected={store.selectedPlanId === plan.id}
                   currency={store.currency}
-                  onSelect={() => store.selectPlan(plan.id)}
+                  onSelect={() => store.selectPlan(store.selectedPlanId === plan.id ? '' : plan.id)}
                 />
               ))}
             </div>

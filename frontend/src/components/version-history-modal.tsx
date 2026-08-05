@@ -12,7 +12,7 @@ const versions = [
     current: true,
     title: 'Lançamento da Calculadora Conexa',
     changes: [
-      { icon: Calculator, text: 'Calculadora de custos da Meta com atualização em tempo real.' },
+      { icon: Calculator, text: 'Estimativa Meta com atualização em tempo real.' },
       { icon: PanelLeft, text: 'Navegação em etapas integrada ao layout corporativo da Infarma.' },
       { icon: Moon, text: 'Suporte completo aos temas claro e escuro.' },
     ],

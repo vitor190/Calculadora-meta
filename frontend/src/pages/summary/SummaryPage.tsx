@@ -48,7 +48,7 @@ export function SummaryPage() {
         </div>
         <div className="grid min-w-0 items-start gap-4 p-5 lg:grid-cols-2">
           <FinancialDetailGroup
-            label="Custos da Meta"
+            label="Estimativa Meta"
             total={formatCurrency(totals.meta, store.currency)}
             color="#049df6"
           >
