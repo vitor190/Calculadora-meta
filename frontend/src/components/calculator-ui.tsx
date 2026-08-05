@@ -261,6 +261,7 @@ export function CalculatorShell({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const calculatorState = useCalculator();
   const calculatorData = selectCalculatorData(calculatorState);
   const { resetCalculator } = calculatorState;
@@ -268,6 +269,12 @@ export function CalculatorShell({
     0,
     calculatorSteps.findIndex((step) => step.path === location.pathname),
   );
+  const startNewSimulation = () => {
+    resetCalculator();
+    navigate('/calculadora/informacoes');
+    setIsResetConfirmOpen(false);
+  };
+
   return (
     <div className="mx-auto w-full min-w-0 max-w-7xl">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -283,15 +290,11 @@ export function CalculatorShell({
           onClick={() => {
             const hasChanges =
               JSON.stringify(calculatorData) !== JSON.stringify(createInitialCalculatorData());
-            if (
-              hasChanges &&
-              !window.confirm(
-                'Iniciar uma nova simulação? Todos os dados da simulação atual serão descartados.',
-              )
-            )
+            if (hasChanges) {
+              setIsResetConfirmOpen(true);
               return;
-            resetCalculator();
-            navigate('/calculadora/informacoes');
+            }
+            startNewSimulation();
           }}
         >
           <RotateCcw
@@ -329,6 +332,69 @@ export function CalculatorShell({
           </button>
         )}
       </div>
+      {isResetConfirmOpen && (
+        <div className="fixed inset-0 z-[10000001] flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label="Cancelar nova simulação"
+            onClick={() => setIsResetConfirmOpen(false)}
+            className="absolute inset-0 bg-gray-950/60 backdrop-blur-[2px]"
+          />
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reset-simulation-title"
+            aria-describedby="reset-simulation-description"
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') setIsResetConfirmOpen(false);
+            }}
+            className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-theme-xl dark:border-gray-800 dark:bg-gray-900"
+          >
+            <div className="p-5 sm:p-6">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-500 dark:bg-brand-500/10 dark:text-brand-400">
+                <RotateCcw
+                  size={21}
+                  aria-hidden="true"
+                />
+              </span>
+              <h2
+                id="reset-simulation-title"
+                className="mt-4 text-lg font-semibold text-gray-900 dark:text-white/90"
+              >
+                Iniciar uma nova simulação?
+              </h2>
+              <p
+                id="reset-simulation-description"
+                className="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400"
+              >
+                Todos os dados da simulação atual serão descartados. Esta ação não pode ser
+                desfeita.
+              </p>
+            </div>
+            <footer className="flex flex-col-reverse gap-2 border-t border-gray-100 bg-gray-50 px-5 py-4 dark:border-gray-800 dark:bg-gray-950/50 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setIsResetConfirmOpen(false)}
+                className={`${ui.secondaryButton} min-h-10 justify-center px-4`}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={startNewSimulation}
+                className={`${ui.createButton} min-h-10 justify-center`}
+              >
+                <RotateCcw
+                  size={16}
+                  aria-hidden="true"
+                />
+                Iniciar nova simulação
+              </button>
+            </footer>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
