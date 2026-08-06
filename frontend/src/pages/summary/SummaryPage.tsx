@@ -9,6 +9,7 @@ import { commercialCatalog } from '../../lib/commercial-catalog';
 import { formatCurrency } from '../../lib/currency';
 import { calculateDiscount, calculateTotals } from '../../services/calculator.service';
 import { useCalculator } from '../../store/calculator.store';
+import { Link } from 'react-router';
 
 export function SummaryPage() {
   const store = useCalculator();
@@ -22,14 +23,23 @@ export function SummaryPage() {
   return (
     <CalculatorShell
       finalAction={
-        <button
-          type="button"
-          onClick={openProposal}
+        <Link
+          to="/proposta"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-semibold text-white transition hover:bg-brand-600"
         >
           Visualizar proposta
-          <ExternalLink size={16} />
-        </button>
+          <ExternalLink size={16} />{' '}
+        </Link>
+        // <button
+        //   type="button"
+        //   onClick={openProposal}
+        //   className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-semibold text-white transition hover:bg-brand-600"
+        // >
+        //   Visualizar proposta
+        //   <ExternalLink size={16} />
+        // </button>
       }
     >
       <section className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
