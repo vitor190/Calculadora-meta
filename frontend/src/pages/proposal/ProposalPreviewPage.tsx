@@ -35,6 +35,11 @@ function Section({
         </h3>
       </header>
       <div className="proposal-category-content divide-y divide-gray-100 px-5 dark:divide-gray-800 sm:px-6">
+        <div className="report-table-heading hidden" aria-hidden="true">
+          <span>Produto / serviço</span>
+          <span>Como o valor foi calculado</span>
+          <span>Total</span>
+        </div>
         {children}
       </div>
     </section>
@@ -45,17 +50,19 @@ function FinancialItem({
   title,
   description,
   details,
-  totalLabel = 'Subtotal líquido',
+  totalLabel = 'Total do item',
   total,
+  showTotal = true,
 }: {
   title: string;
   description?: string;
   details: ReactNode;
   totalLabel?: string;
   total: string;
+  showTotal?: boolean;
 }) {
   return (
-    <div className="financial-item grid gap-3 py-5 md:grid-cols-[minmax(0,1fr)_minmax(15rem,auto)] md:gap-8">
+    <div className="financial-item grid gap-3 py-5 md:grid-cols-[minmax(0,0.9fr)_minmax(20rem,1.1fr)] md:gap-6">
       <div className="min-w-0">
         <h4 className="break-words text-sm font-semibold text-gray-900 dark:text-white/90">
           {title}
@@ -66,12 +73,14 @@ function FinancialItem({
           </p>
         )}
       </div>
-      <div className="min-w-0 space-y-1.5 text-sm md:text-right">
+      <div className="financial-item-details min-w-0 space-y-1.5 text-sm">
         {details}
-        <div className="flex items-baseline justify-between gap-4 pt-1 font-semibold text-gray-900 md:justify-end dark:text-white/90">
-          <span className="text-xs text-gray-500 dark:text-gray-400">{totalLabel}</span>
-          <span className="tabular-nums">{total}</span>
-        </div>
+        {showTotal && (
+          <div className="financial-item-subtotal flex items-baseline justify-between gap-4 border-t border-gray-100 pt-2 font-semibold text-gray-900 dark:border-gray-800 dark:text-white/90">
+            <span className="text-xs text-gray-500 dark:text-gray-400">{totalLabel}</span>
+            <span className="tabular-nums">{total}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -88,7 +97,7 @@ function AmountLine({
 }) {
   return (
     <div
-      className={`flex items-baseline justify-between gap-4 md:justify-end ${
+      className={`amount-line flex items-baseline justify-between gap-4 ${
         discount ? 'text-success-600 dark:text-success-400' : 'text-gray-500 dark:text-gray-400'
       }`}
     >
@@ -201,37 +210,86 @@ export function ProposalPreviewPage() {
           .proposal-section-heading p { margin-top: .7mm !important; color: #d0d5dd !important; font-size: 8px !important; }
           .proposal-section { margin: 0 !important; overflow: visible !important; border-width: 0 1px 1px !important; border-radius: 0 !important; break-inside: auto !important; page-break-inside: auto !important; }
           .proposal-section + .proposal-section { border-top: 0 !important; }
-          .proposal-section header { gap: 2mm !important; padding: 1.2mm 3mm !important; border-top: 1px solid #98a2b3 !important; }
+          .proposal-meta { margin-top: 3mm !important; break-inside: avoid-page !important; page-break-inside: avoid !important; }
+          .proposal-resources { margin-top: .8mm !important; }
+          .proposal-section header { gap: 2.5mm !important; padding: 1.8mm 3.5mm !important; border-top: 1px solid #98a2b3 !important; }
           .proposal-category-heading { break-after: avoid-page !important; page-break-after: avoid !important; }
-          .proposal-section header span { height: 5mm !important; min-width: 5mm !important; border-radius: 1mm !important; font-size: 7px !important; }
-          .proposal-section header h3 { font-size: 9px !important; }
-          .proposal-section > div { padding-inline: 3mm !important; }
-          .financial-item { display: grid !important; grid-template-columns: minmax(0, 1fr) 56mm 8mm !important; gap: 4mm !important; padding-block: 1.2mm !important; overflow: visible !important; }
-          .financial-item > div:last-child { grid-column: 2 !important; width: 56mm !important; overflow: visible !important; }
-          .financial-item > div:last-child span { color: #344054 !important; }
-          .financial-item h4, .financial-item div { font-size: 9px !important; line-height: 1.3 !important; }
-          .financial-item p, .financial-item span { margin-top: .5mm !important; font-size: 8px !important; line-height: 1.3 !important; }
-          .plan-features { padding-block: 1.2mm !important; }
+          .proposal-section header > span { display: none !important; }
+          .proposal-section header h3 { font-size: 10px !important; line-height: 1.25 !important; letter-spacing: .08em !important; }
+          .proposal-section > div { padding-inline: 3.5mm !important; }
+          .proposal-category-content > :not(:last-child) { border-color: #d0d5dd !important; }
+          .financial-item { display: grid !important; grid-template-columns: minmax(0, 42%) minmax(0, 1fr) !important; align-items: start !important; column-gap: 5mm !important; padding-block: 2mm !important; overflow: visible !important; }
+          .financial-item > div:first-child { padding-top: .35mm !important; }
+          .financial-item-details { grid-column: 2 !important; width: auto !important; overflow: visible !important; }
+          .financial-item-details > * + * { margin-top: 1mm !important; }
+          .financial-item-details span { color: #344054 !important; }
+          .financial-item h4 { font-size: 9.5px !important; line-height: 1.35 !important; font-weight: 700 !important; color: #1d2939 !important; }
+          .financial-item p, .financial-item span { margin-top: 0 !important; font-size: 8.5px !important; line-height: 1.35 !important; }
+          .amount-line > span:first-child, .financial-item-subtotal > span:first-child { font-weight: 600 !important; }
+          .amount-line > span:last-child, .financial-item-subtotal > span:last-child { min-width: 27mm !important; text-align: right !important; white-space: nowrap !important; }
+          .financial-item-subtotal { margin-top: .8mm !important; padding-top: .5mm !important; border-top: 0 !important; }
+          .financial-item-subtotal span { font-weight: 700 !important; color: #1d2939 !important; }
+          .plan-features { padding: 1.8mm 3mm !important; }
           .plan-features p { margin-bottom: 1.5mm !important; font-size: 8px !important; }
           .plan-features ul { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .5mm 2mm !important; }
           .plan-features li { font-size: 8px !important; line-height: 1.3 !important; }
           .plan-features li { break-inside: avoid-page !important; page-break-inside: avoid !important; }
           .plan-features svg { width: 10px !important; height: 10px !important; }
-          .section-closing { border-radius: 0 !important; gap: 2.5mm !important; padding: 1.5mm 3mm !important; }
+          .section-closing { border-radius: 0 !important; gap: 2.5mm !important; padding: 2mm 3.5mm !important; }
           .proposal-composition > .section-closing { margin: 0 0 3mm !important; background: #e0f2fe !important; border: 1px solid #38bdf8 !important; color: #075985 !important; }
           .proposal-composition > .section-closing * { color: #075985 !important; }
-          .section-closing strong, .section-closing h3 { font-size: 12px !important; }
-          .proposal-implementation { margin-top: 0 !important; break-inside: auto !important; page-break-inside: auto !important; }
+          .section-closing strong, .section-closing h3 { font-size: 12.5px !important; line-height: 1.3 !important; }
+          .proposal-implementation { margin-top: 4mm !important; break-inside: auto !important; page-break-inside: auto !important; }
           .proposal-implementation > .proposal-section-heading { display: none !important; }
           .proposal-implementation > .proposal-section { border-top-width: 1px !important; }
-          .proposal-implementation .section-closing { padding-block: 1.5mm !important; }
-          .proposal-implementation .section-closing div { margin-top: 1mm !important; padding: 1.5mm 3mm !important; border: 1px solid #a7f3d0 !important; border-radius: 0 !important; background: #ecfdf5 !important; color: #344054 !important; font-size: 8px !important; }
-          .proposal-implementation .section-closing div * { color: #344054 !important; }
+          .proposal-implementation .section-closing { padding-block: 2.2mm !important; }
+          .proposal-implementation .payment-condition { margin-top: 1mm !important; padding: 1.5mm 3mm !important; border: 1px solid #d0d5dd !important; border-radius: 0 !important; background: #f9fafb !important; color: #344054 !important; font-size: 8px !important; }
+          .proposal-implementation .payment-condition * { color: #344054 !important; }
           .proposal-section > div > p { padding-block: 1.2mm !important; font-size: 8px !important; line-height: 1.25 !important; }
           .financial-item, .section-closing, .category-total, .category-note, .payment-condition { break-inside: avoid-page !important; page-break-inside: avoid !important; }
           .category-total, .category-note { break-before: avoid-page !important; page-break-before: avoid !important; }
           .proposal-section-heading { break-after: avoid-page !important; page-break-after: avoid !important; }
-          .proposal-footer { position: fixed !important; right: 0 !important; bottom: 0 !important; left: 0 !important; padding: 1.5mm 6mm !important; background: #f2f4f7 !important; border-color: #d0d5dd !important; color: #667085 !important; font-size: 8px !important; }
+          .proposal-header { border-bottom: 0 !important; }
+          .proposal-header > div { border-color: #0792f1 !important; }
+          .proposal-header h1 { font-size: 15px !important; font-weight: 600 !important; }
+          .proposal-header p:first-child { color: #075985 !important; font-size: 7px !important; }
+          .proposal-summary { margin: 0 6mm 3mm !important; padding: 2.5mm 3.5mm !important; border: 1.5px solid #667085 !important; background: #f2f4f7 !important; }
+          .proposal-summary > div { grid-template-columns: 1.3fr 1fr !important; align-items: stretch !important; }
+          .proposal-summary .summary-card { padding: 1.5mm 3mm !important; border: 0 !important; border-left: 1mm solid #0792f1 !important; background: transparent !important; }
+          .proposal-summary .summary-card:last-of-type { border-left-color: #087f8c !important; }
+          .proposal-summary .text-4xl, .proposal-summary .sm\\:text-5xl { font-size: 18px !important; }
+          .proposal-summary .text-2xl, .proposal-summary .sm\\:text-3xl { font-size: 16px !important; }
+          .proposal-content { padding-top: 0 !important; }
+          .proposal-section-heading { padding: 1.5mm 0 1mm !important; border-width: 0 0 1.5px !important; border-color: #344054 !important; background: #fff !important; }
+          .proposal-section-heading h2 { color: #101828 !important; font-size: 11px !important; }
+          .proposal-section-heading p { color: #475467 !important; }
+          .proposal-section { border-width: 0 !important; }
+          .proposal-section + .proposal-section { border-top: 0 !important; }
+          .proposal-section > header { padding: 1.5mm 0 !important; border-width: 0 !important; background: #fff !important; }
+          .proposal-section > header span { height: auto !important; min-width: 0 !important; padding: .7mm 1.5mm !important; border-radius: .5mm !important; background: #e0f2fe !important; color: #075985 !important; }
+          .proposal-section > header h3 { color: #101828 !important; }
+          .proposal-section > .proposal-category-content { padding-inline: 0 !important; }
+          .proposal-category-content { outline: 1px solid #98a2b3 !important; outline-offset: -1px !important; }
+          .proposal-category-content > :not(:first-child) { border-top-width: 0 !important; }
+          .report-table-heading { display: grid !important; grid-template-columns: minmax(0, 42%) minmax(0, 1fr) 27mm !important; column-gap: 5mm !important; align-items: center !important; padding: 1.8mm 3mm !important; border-top: 1px solid #d0d5dd !important; border-bottom: 1px solid #d0d5dd !important; background: #f2f4f7 !important; color: #344054 !important; }
+          .report-table-heading span { font-size: 7px !important; line-height: 1.2 !important; font-weight: 700 !important; color: #344054 !important; }
+          .report-table-heading span:last-child { text-align: right !important; }
+          .financial-item { margin-top: 0 !important; padding: 2.2mm 3mm !important; border: 0 !important; background: #fff !important; }
+          .financial-item:nth-of-type(even) { background: #f9fafb !important; }
+          .financial-item + .financial-item { margin-top: 0 !important; border-top: 1px solid #d0d5dd !important; }
+          .proposal-plan .financial-item { border-bottom: 1px solid #d0d5dd !important; }
+          .proposal-implementation .financial-item { border-bottom: 1px solid #d0d5dd !important; }
+          .proposal-implementation .financial-item + .financial-item { border-top: 0 !important; }
+          .financial-item-details { display: grid !important; grid-template-columns: minmax(0, 1fr) 27mm !important; column-gap: 5mm !important; }
+          .financial-item-details > * { grid-column: 1 / -1 !important; display: grid !important; grid-template-columns: minmax(0, 1fr) 27mm !important; column-gap: 5mm !important; }
+          .financial-item-subtotal { border: 0 !important; }
+          .category-total { margin-top: 0 !important; padding: 2.2mm 3mm !important; border: 0 !important; border-bottom: 1.5px solid #049df6 !important; background: #e5f7ff !important; color: #0066a3 !important; }
+          .category-total * { color: #0066a3 !important; }
+          .category-total strong:first-child { margin-left: auto !important; font-size: 8px !important; }
+          .category-total strong:last-child { min-width: 27mm !important; text-align: right !important; }
+          .category-note { margin-top: 0 !important; padding: 1.5mm 3mm !important; background: #f9fafb !important; }
+          .proposal-composition > .section-closing { margin-top: 2mm !important; background: #e0f2fe !important; border-width: 1px 1px 1.5px !important; border-color: #0284c7 !important; }
+          .proposal-footer { position: fixed !important; right: 0 !important; bottom: -1mm !important; left: 0 !important; padding: 1.5mm 6mm !important; background: #f2f4f7 !important; border-color: #d0d5dd !important; color: #667085 !important; font-size: 8px !important; }
           @page { size: A4 portrait; margin: 6mm 6mm 12mm; }
         }`}
       </style>
@@ -376,10 +434,15 @@ export function ProposalPreviewPage() {
                             discount
                           />
                         </>
-                      ) : null
+                      ) : (
+                        <AmountLine
+                          label="Sem desconto"
+                          value={formatCurrency(totals.discountedPlan, currency)}
+                        />
+                      )
                     }
-                    totalLabel="Mensalidade líquida"
                     total={formatCurrency(totals.discountedPlan, currency)}
+                    showTotal={false}
                   />
                   {selectedPlan.features.length > 0 && (
                     <div className="plan-features py-4">
@@ -403,6 +466,10 @@ export function ProposalPreviewPage() {
                       </ul>
                     </div>
                   )}
+                  <GroupTotal
+                    label="Total mensal do plano"
+                    value={formatCurrency(totals.discountedPlan, currency)}
+                  />
                 </Section>
               )}
 
@@ -416,9 +483,13 @@ export function ProposalPreviewPage() {
                     <FinancialItem
                       key={item.id}
                       title={item.category}
-                      description={`${item.quantity} template${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, currency)} por unidade`}
-                      details={null}
-                      totalLabel="Subtotal"
+                      details={
+                        <AmountLine
+                          label={`${item.quantity} template${item.quantity === 1 ? '' : 's'} × ${formatCurrency(item.value, currency)}`}
+                          value={formatCurrency(item.quantity * item.value, currency)}
+                        />
+                      }
+                      totalLabel="Total estimado"
                       total={formatCurrency(item.quantity * item.value, currency)}
                     />
                   ))}
@@ -525,7 +596,7 @@ export function ProposalPreviewPage() {
                         details={
                           <>
                             <AmountLine
-                              label="Valor bruto"
+                              label="Valor antes do desconto"
                               value={formatCurrency(item.value, currency)}
                             />
                             {discount > 0 && (
@@ -541,18 +612,15 @@ export function ProposalPreviewPage() {
                       />
                     );
                   })}
-                  <div className="section-closing py-5">
-                    <GroupTotal
-                      label="Total da implantação"
-                      value={formatCurrency(totals.implementationTotal, currency)}
-                      prominent
-                    />
-                    <div className="payment-condition mt-1 flex flex-col gap-1 rounded-lg bg-gray-50 px-4 py-3 text-sm text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
-                      <span>Condição de pagamento</span>
-                      <strong className="tabular-nums text-gray-900 dark:text-white/90">
-                        {paymentCondition}
-                      </strong>
-                    </div>
+                  <GroupTotal
+                    label="Total da implantação"
+                    value={formatCurrency(totals.implementationTotal, currency)}
+                  />
+                  <div className="payment-condition mt-1 flex flex-col gap-1 rounded-lg bg-gray-50 px-4 py-3 text-sm text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
+                    <span>Condição de pagamento</span>
+                    <strong className="tabular-nums text-gray-900 dark:text-white/90">
+                      {paymentCondition}
+                    </strong>
                   </div>
                 </Section>
               </section>
